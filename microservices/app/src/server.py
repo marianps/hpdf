@@ -1,20 +1,41 @@
 from src import app
-from flask import jsonify, render_template, request, make_response
+from flask import jsonify, render_template, request, make_response, json
 
 
 @app.route("/")
 def home():
     return "Hasura Hello World from Pritham"
 
-@app.route("/index")
-def index():
-    return render_template('index.html')
 
 # Uncomment to add a new URL at /new
 
 @app.route("/json")
 def json_message():
-    return jsonify(message="Hello World")
+    return jsonify(message="Hello World from Pritham")
+
+@app.route("/index")
+def index():
+    return render_template('index.html')
+
+# Handling author json file routing
+@app.route('/author',methods=['GET'])
+def author():
+
+    vuri1 = "https://jsonplaceholder.typicode.com/users"
+    vuri2 = "https://jsonplaceholder.typicode.com/posts"
+    try:
+        vResponse1 = requests.get(vuri1)
+    except requests.ConnectionError:
+       return "Connection Error"
+
+    vResponse2 = requests.get(vuri2)
+    vauthor = json.load(vResponse1.data)
+
+    vposts  = json.load(vResponse2.data)
+    vusers = {vauth['id']:{'name':vauth['name'],'count':0} for vauth in vauthor}
+    for vpost in vposts:
+        vusers[vpost['userId']]['count']+=1
+    return render_template('authors.html', users=vusers)
 
 # Handling set cookie routing
 @app.route('/setcookie', methods = ['POST', 'GET'])
