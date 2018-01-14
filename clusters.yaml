@@ -1,0 +1,7 @@
+- alias: hasura
+  config:
+    configmap: controller-conf
+    namespace: anthology78-hasura
+  data: null
+  kubeContext: anthology78
+  name: anthology78
