@@ -4,7 +4,7 @@ from flask import jsonify, render_template, request, make_response
 
 @app.route("/")
 def home():
-    return "Hasura Hello World - Pritham"
+    return render_template('index.html')
 
 # Uncomment to add a new URL at /new
 
