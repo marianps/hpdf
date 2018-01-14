@@ -4,8 +4,11 @@ from flask import jsonify, render_template, request, make_response
 
 @app.route("/")
 def home():
-    return render_template('index.html')
+    return "Hasura Hello World from Pritham"
 
+@app.route("/index")
+def home():
+    return render_template('index.html')
 # Uncomment to add a new URL at /new
 
 @app.route("/json")
