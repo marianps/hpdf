@@ -3,7 +3,7 @@ from flask import jsonify, render_template, request, make_response, json
 
 @app.route("/")
 def home():
-    return "Hasura Hello World from Pritham"
+    return "Hasura Hello World"
 
 
 # Uncomment to add a new URL at /new
