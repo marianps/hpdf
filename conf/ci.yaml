@@ -6,13 +6,13 @@ registry: {{ cluster.metadata.registry|json }}
 # remotes define which microservices has to be updated when code is pushed to the remote
 remotes:
   # Example:
-  
+
   # remote-name:
   #   namespace.service-name:
   #     container-name:
   #       path: microservices/app
   #       dockerfile: microservices/app/Dockerfile
-  
+
   # Default remote to push code and configuration
   {{ cluster.name }}:        # DO NOT edit this line
     <<: {}                   # DO NOT edit this line
@@ -23,4 +23,11 @@ remotes:
         path: microservices/app
 
     # Add output of `hasura conf generate-remote` below this line
+
+
+    '{{ cluster.metadata.namespaces.user }}.t47d':
+      app:
+        dockerfile: microservices/t47d/Dockerfile
+        path: microservices/t47d
+
 
