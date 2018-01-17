@@ -15,8 +15,12 @@ RUN pip3 install -r /tmp/requirements.txt
 WORKDIR /app
 
 # copy current directory to /app
+
+
 COPY . /app
+
+
 
 # run gunicorn server
 # port is configured through the gunicorn config file
-CMD ["gunicorn", "--config", "./conf/gunicorn_config.py", "src:app"]
+CMD ["gunicorn", "--config", "./conf/gunicorn_config.py", "src:t47d"]
