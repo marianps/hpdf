@@ -12,12 +12,12 @@ COPY src/requirements.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt
 
 # set /app as working directory
-WORKDIR /app
+WORKDIR /t47d
 
 # copy current directory to /app
 
 
-COPY . /app
+COPY . /t47d
 
 
 
