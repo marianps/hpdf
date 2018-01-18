@@ -182,7 +182,6 @@ t47d:
     upstreamServicePort: 80
     corsPolicy: allow_all
 
-
 ui:
   /:
     corsPolicy: null
