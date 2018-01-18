@@ -183,7 +183,7 @@ t47d:
     corsPolicy: allow_all
 
 
-t47d:
+ui:
   /:
     upstreamService:
       name: ui
