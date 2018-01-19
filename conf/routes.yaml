@@ -173,8 +173,7 @@ app:
 # To see actual endpoints for these routes, use `$ hasura microserivce list`
 
 
-
-app:
+t47d:
   /:
     upstreamService:
       name: t47d
