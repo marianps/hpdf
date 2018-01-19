@@ -44,7 +44,7 @@ def login():
     # resp.content contains the json response.
 
     print(resp.content)
-    return render_template('homedrive.html')
+    return (render_template('homedrive.html',name = vdata))
 
 
 @app.route("/dregister", methods = ['POST', 'GET'])
