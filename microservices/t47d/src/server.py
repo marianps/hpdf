@@ -16,6 +16,10 @@ def json_message():
 def index():
     return render_template('dlogin.html')
 
+@app.route("/regdisplay", methods = ['POST', 'GET'])
+def registerpage():
+    return render_template('dregister.html')
+
 @app.route("/dlogin", methods = ['POST', 'GET'])
 def login():
     if request.method == 'POST':
@@ -44,7 +48,7 @@ def login():
     # resp.content contains the json response.
 
     print(resp.content)
-    return (render_template('homedrive.html',name = vuser))
+    return (render_template('homedrive.html',name = vuser,msg = resp.content))
 
 
 @app.route("/dregister", methods = ['POST', 'GET'])
