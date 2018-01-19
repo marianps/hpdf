@@ -19,8 +19,8 @@ def index():
 @app.route("/dlogin", methods = ['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        vuser = request.form['vName']
-        vpwd = request.form['vPwd']
+        vuser = request.form['hvName']
+        vpwd = request.form['hvPwd']
     # This is the url to which the query is made
     url = "https://auth.anthology78.hasura-app.io/v1/login"
 
@@ -44,7 +44,7 @@ def login():
     # resp.content contains the json response.
 
     print(resp.content)
-    return (render_template('homedrive.html',name = vdata))
+    return (render_template('homedrive.html',name = vuser))
 
 
 @app.route("/dregister", methods = ['POST', 'GET'])
@@ -53,8 +53,8 @@ def dregister():
     # This is the url to which the query is made
     url = "https://auth.anthology78.hasura-app.io/v1/signup"
 
-    vuser = request.form['vName']
-    vpwd = request.form['vPwd']
+    vuser = request.form['hvName']
+    vpwd = request.form['hvPwd']
     # This is the json payload for the query
     requestPayload = {
     "provider": "username",
