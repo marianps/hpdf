@@ -173,15 +173,6 @@ app:
 # To see actual endpoints for these routes, use `$ hasura microserivce list`
 
 
-t47d:
-  /:
-    upstreamService:
-      name: t47d
-      namespace: '{{ cluster.metadata.namespaces.user }}'
-    upstreamServicePath: /
-    upstreamServicePort: 80
-    corsPolicy: allow_all
-
 
 amdui:
   /:
