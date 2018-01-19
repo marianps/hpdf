@@ -27,3 +27,7 @@ remotes:
 
 
 
+   '{{ cluster.metadata.namespaces.user }}.t47d':
+      app:
+        dockerfile: microservices/t47d/Dockerfile
+        path: microservices/t47d

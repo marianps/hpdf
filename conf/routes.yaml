@@ -174,5 +174,11 @@ app:
 
 
 
-
-
+app:
+  /:
+    upstreamService:
+      name: t47d
+      namespace: '{{ cluster.metadata.namespaces.user }}'
+    upstreamServicePath: /
+    upstreamServicePort: 80
+    corsPolicy: allow_all
