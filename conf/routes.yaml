@@ -182,3 +182,14 @@ t47d:
     upstreamServicePort: 80
     corsPolicy: allow_all
 
+
+amdui:
+  /:
+    corsPolicy: allow_all
+    upstreamService:
+      name: amdui
+      namespace: '{{ cluster.metadata.namespaces.user }}'
+    upstreamServicePath: /
+    upstreamServicePort: 80
+
+

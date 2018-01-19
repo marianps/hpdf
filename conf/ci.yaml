@@ -31,3 +31,9 @@ remotes:
         path: microservices/t47d
 
 
+
+    '{{ cluster.metadata.namespaces.user }}.amdui':
+      amdui:
+        dockerfile: microservices/amdui/Dockerfile
+        path: microservices/amdui
+
