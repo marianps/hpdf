@@ -4,6 +4,7 @@ from flask import jsonify, render_template, request, make_response,json
 
 @app.route("/")
 def home():
+    print(CLUSTER_NAME)
     return "Hasura Hello World"
 
 # Uncomment to add a new URL at /new
