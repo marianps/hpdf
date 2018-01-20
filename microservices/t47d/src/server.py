@@ -1,6 +1,17 @@
+import os
+import sys
 from src import app
 import requests
 from flask import jsonify, render_template, request, make_response,json
+
+CLUSTER_NAME = os.environ.get("CLUSTER_NAME")
+if CLUSTER_NAME is None:
+    print("""
+    Set the name of your cluster as an environment variable and start again:
+
+    $ export CLUSTER_NAME=<cluster-name>
+
+    """)
 
 @app.route("/")
 def home():
