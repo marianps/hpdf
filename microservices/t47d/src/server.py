@@ -204,7 +204,9 @@ def fileupload():
             filename = secure_filename(fileup.filename)
             fileup.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-    resp = requests.post(url, data=fileup, headers=headers)
+#    resp = requests.post(url, data=fileup, headers=headers)
+    resp = requests.post(url, data=fileup)
+
     # resp.content contains the json response.
     print(resp.content)
     return (render_template('homedrive.html',name = vuser,msg = resp.content, responseO=resp ))
