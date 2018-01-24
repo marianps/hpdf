@@ -257,6 +257,11 @@ def fileupload():
     print(request)
     print(request.headers)
     print(request.form)
+    print(request.auth)
+    print(request.json)
+    print(request.cookies)
+
+
     # Setting headers
     headers = {
         "Authorization": "Bearer "
