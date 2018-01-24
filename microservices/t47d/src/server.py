@@ -108,7 +108,7 @@ def login():
         print(vauthdata['username'])
         print(vauthdata['hasura_id'])
         print(vauthdata['hasura_roles'])
-#        session['auth_token']= vauthdata['auth_token']
+        session['auth_token']= vauthdata['auth_token']
 #        session['username']= vauthdata['username']
 #        session['hasura_id']= vauthdata['hasura_id']
 #        session['hasura_roles']= vauthdata['hasura_roles']
@@ -174,9 +174,6 @@ def dregister():
         print(vauthdata['hasura_id'])
         print(vauthdata['hasura_roles'])
 #        session['auth_token']= vauthdata['auth_token']
-#       session['username']= vauthdata['username']
-#        session['hasura_id']= vauthdata['hasura_id']
-#        session['hasura_roles']= vauthdata['hasura_roles']
 
 
     if request.content_type == 'application/json':
