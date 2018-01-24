@@ -148,7 +148,7 @@ def login():
         print(resp1.content)
 
 
-        respo = make_response(redirect(url_for('hpage')))
+        respo = make_response(redirect(url_for('homepage')))
         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
         respo.set_cookie(username, vauthdata['username'] )
         respo.set_cookie(hasura_id, vauthdata['hasura_id'] )
@@ -211,7 +211,7 @@ def dregister():
         print(vauthdata['hasura_id'])
         print(vauthdata['hasura_roles'])
 
-        respo = make_response(redirect(url_for('hpage')))
+        respo = make_response(redirect(url_for('homepage')))
         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
         respo.set_cookie(username, vauthdata['username'] )
         respo.set_cookie(hasura_id, vauthdata['hasura_id'] )
@@ -219,7 +219,7 @@ def dregister():
     else:
         return resp.content
 
-@app.route("/hpage", methods = ['POST'])
+@app.route("/hpage", methods = ['POST','GET'])
 def homepage():
 
     vauth = request.cookies.get(CLUSTER_NAME)
@@ -340,7 +340,7 @@ def fileupload():
         # resp.content contains the json response.
         print(resp1.content)
 
-        respo = make_response(redirect(url_for('hpage')))
+        respo = make_response(redirect(url_for('homepage')))
         return respo
     else:
         return resp.content
