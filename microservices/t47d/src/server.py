@@ -4,6 +4,7 @@ from src import app
 import requests
 from flask import jsonify, render_template, request, make_response, json
 from flask import redirect, url_for, session
+from werkzeug import secure_filename
 #-------------------------------------------------------------------------------
 # Name:        DriveClone
 # Purpose:
@@ -27,6 +28,14 @@ if CLUSTER_NAME is None:
     $ export CLUSTER_NAME=<cluster-name>
 
     """)
+
+UPLOAD_FOLDER = '/fuploads/'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','docx','xlsx','pptx'])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @app.route("/")
 def home():
@@ -181,15 +190,24 @@ def fileupload():
     # This is the url to which the query is made
     url = "https://filestore." + CLUSTER_NAME + ".hasura-app.io/v1/file"
 
+    print(request)
+    print(request.headers)
+    print(request.form)
     # Setting headers
     headers = {
         "Authorization": "Bearer 66f42689afb9a71c36f9de7a4825ad1517f1338619984a6d"
     }
 
     # Open the file and make the query
-    with open(request.files['hvfname'], 'rb') as file_image:
-        resp = requests.post(url, data=file_image.read(), headers=headers)
+#    with open(request.files['hvfname'], 'rb') as file_image:
+    if request.method =='POST':
 
+        fileup = request.files['hvfname']
+        if fileup and allowed_file(fileup.filename):
+            filename = secure_filename(fileup.filename)
+            fileup.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+    resp = requests.post(url, data=fileup, headers=headers)
     # resp.content contains the json response.
     print(resp.content)
     return (render_template('homedrive.html',name = vuser,msg = resp.content, responseO=resp ))
