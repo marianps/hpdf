@@ -113,10 +113,45 @@ def login():
 #        session['hasura_id']= vauthdata['hasura_id']
 #        session['hasura_roles']= vauthdata['hasura_roles']
 
+#        session['auth_token']= vauthdata['auth_token']
+
+        # This is the url to which the query is made
+        url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
+
+        # This is the json payload for the query
+        requestPayload1 = {
+            "type": "select",
+            "args": {
+                "table": "user_files",
+                "columns": [
+                    "*"
+                ],
+                "where": {
+                    "user_id": {
+                        "$eq": vauthdata['hasura_id']
+                    }
+                }
+            }
+        }
+
+        # Setting headers
+        headers1 = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+ vauthdata['auth_token']
+        }
+
+        # Make the query and store response in resp
+        resp1 = requests.request("POST", url1, data=json.dumps(requestPayload1), headers=headers1)
+
+        # resp.content contains the json response.
+        print(resp1.content)
+
+
+
     if request.content_type == 'application/json':
-        return resp.content
+        return resp.content, resp1.content
     else:
-        return (render_template('homedrive.html',name = vuser,msg = resp.content, responseO=resp ))
+        return (render_template('homedrive.html',name = vuser,msg = resp.content, response1=resp1.content))
 
 
 @app.route("/dregister", methods = ['POST'])
@@ -175,11 +210,43 @@ def dregister():
         print(vauthdata['hasura_roles'])
 #        session['auth_token']= vauthdata['auth_token']
 
+        # This is the url to which the query is made
+        url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
+
+        # This is the json payload for the query
+        requestPayload1 = {
+            "type": "select",
+            "args": {
+                "table": "user_files",
+                "columns": [
+                    "*"
+                ],
+                "where": {
+                    "user_id": {
+                        "$eq": vauthdata['hasura_id']
+                    }
+                }
+            }
+        }
+
+        # Setting headers
+        headers1 = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+ vauthdata['auth_token']
+        }
+
+        # Make the query and store response in resp
+        resp1 = requests.request("POST", url1, data=json.dumps(requestPayload1), headers=headers1)
+
+        # resp.content contains the json response.
+        print(resp1.content)
+
+
 
     if request.content_type == 'application/json':
-        return resp.content
+        return resp.content, resp1.content
     else:
-        return (render_template('homedrive.html',name = vuser,msg = resp.content, responseO=resp))
+        return (render_template('homedrive.html',name = vuser,msg = resp.content, response1=resp1.content))
 
 
 @app.route("/fupload", methods = ['POST'])
@@ -191,9 +258,10 @@ def fileupload():
     print(request.headers)
     print(request.form)
     # Setting headers
-#    headers = {
-#        "Authorization": "Bearer a39a8f499cd150a6e6448339becfa5856d8a35b2e81e21b3"
-#    }
+    headers = {
+        "Authorization": "Bearer "
+    }
+
 
     # Open the file and make the query
 #    with open(request.files['hvfname'], 'rb') as file_image:
@@ -204,8 +272,8 @@ def fileupload():
             filename = secure_filename(fileup.filename)
             fileup.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-#    resp = requests.post(url, data=fileup, headers=headers)
-    resp = requests.post(url, data=fileup)
+    resp = requests.post(url, data=fileup, headers=headers)
+#    resp = requests.post(url, data=fileup)
 
     # resp.content contains the json response.
     print(resp.content)
