@@ -37,6 +37,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
+
 @app.route("/")
 def home():
     print(CLUSTER_NAME)
@@ -147,12 +148,12 @@ def login():
         print(resp1.content)
 
 
-
-    if request.content_type == 'application/json':
-        return resp.content, resp1.content
+        resp.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+        resp.set_cookie(username, vauthdata['username'] )
+        resp.set_cookie(hasura_id, vauthdata['hasura_id'] )
+        return redirect(url_for('hpage'))
     else:
-        return (render_template('homedrive.html',name = vuser,msg = resp.content, response1=resp1.content))
-
+        return resp.content
 
 @app.route("/dregister", methods = ['POST'])
 def dregister():
@@ -208,45 +209,57 @@ def dregister():
         print(vauthdata['username'])
         print(vauthdata['hasura_id'])
         print(vauthdata['hasura_roles'])
-#        session['auth_token']= vauthdata['auth_token']
 
-        # This is the url to which the query is made
-        url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
 
-        # This is the json payload for the query
-        requestPayload1 = {
-            "type": "select",
-            "args": {
-                "table": "user_files",
-                "columns": [
-                    "*"
-                ],
-                "where": {
-                    "user_id": {
-                        "$eq": vauthdata['hasura_id']
-                    }
+        resp.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+        resp.set_cookie(username, vauthdata['username'] )
+        resp.set_cookie(hasura_id, vauthdata['hasura_id'] )
+        return redirect(url_for('hpage'))
+    else:
+        return resp.content
+
+@app.route("/hpage", methods = ['POST'])
+def homepage():
+
+    vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get('username')
+    vhid = request.cookies.get('hasura_id')
+
+    # This is the url to which the query is made
+    url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
+
+    # This is the json payload for the query
+    requestPayload1 = {
+        "type": "select",
+        "args": {
+            "table": "user_files",
+            "columns": [
+                "*"
+            ],
+            "where": {
+                "user_id": {
+                    "$eq": vhid
                 }
             }
         }
+    }
 
-        # Setting headers
-        headers1 = {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer "+ vauthdata['auth_token']
-        }
+    # Setting headers
+    headers1 = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+ vauth
+    }
 
-        # Make the query and store response in resp
-        resp1 = requests.request("POST", url1, data=json.dumps(requestPayload1), headers=headers1)
+    # Make the query and store response in resp
+    resp1 = requests.request("POST", url1, data=json.dumps(requestPayload1), headers=headers1)
 
-        # resp.content contains the json response.
-        print(resp1.content)
-
-
+    # resp.content contains the json response.
+    print(resp1.content)
 
     if request.content_type == 'application/json':
-        return resp.content, resp1.content
+        return resp1.content
     else:
-        return (render_template('homedrive.html',name = vuser,msg = resp.content, response1=resp1.content))
+        return (render_template('homedrive.html',name = vuser,msg = resp1.content))
 
 
 @app.route("/fupload", methods = ['POST'])
@@ -261,10 +274,13 @@ def fileupload():
     print(request.json)
     print(request.cookies)
 
+    vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get('username')
+    vhid = request.cookies.get('hasura_id')
 
     # Setting headers
     headers = {
-        "Authorization": "Bearer "
+        "Authorization": "Bearer " + vauth
     }
 
 
@@ -282,7 +298,48 @@ def fileupload():
 
     # resp.content contains the json response.
     print(resp.content)
-    return (render_template('homedrive.html',name = vuser,msg = resp.content, responseO=resp ))
+    if(resp.status_code >= 200 and resp.status_code < 300):
+        vfileupload = resp.json()
+        print(vfileupload['"file_id'])
+        print(vfileupload['user_id'])
+        print(vfileupload['user_role'])
+        print(vfileupload['content_type'])
+        print(vfileupload['file_status'])
+        print(vfileupload['created_at'])
+        print(vfileupload['file_size'])
+
+        # This is the url to which the query is made
+        url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
+
+        # This is the json payload for the query
+        requestPayload1 = {
+        "type": "insert",
+        "args": {
+            "table": "user_files",
+            "objects": [
+                {
+                    "user_id": vfileupload['user_id'],
+                    "file_path_id": "1",
+                    "file_name": filename,
+                    "file_id": vfileupload['"file_id']
+                }
+                ]
+            }
+        }
+
+        # Setting headers
+        headers1 = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + vauth
+        }
+
+        # Make the query and store response in resp
+        resp1 = requests.request("POST", url1, data=json.dumps(requestPayload1), headers=headers1)
+
+        # resp.content contains the json response.
+        print(resp1.content)
+
+    return redirect(url_for('homepage'))
 
 # Handling all other request and robots.txt request
 @app.errorhandler(404)
