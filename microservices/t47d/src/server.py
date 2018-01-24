@@ -191,9 +191,9 @@ def fileupload():
     print(request.headers)
     print(request.form)
     # Setting headers
-    headers = {
-        "Authorization": "Bearer a39a8f499cd150a6e6448339becfa5856d8a35b2e81e21b3"
-    }
+#    headers = {
+#        "Authorization": "Bearer a39a8f499cd150a6e6448339becfa5856d8a35b2e81e21b3"
+#    }
 
     # Open the file and make the query
 #    with open(request.files['hvfname'], 'rb') as file_image:
