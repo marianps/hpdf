@@ -192,7 +192,7 @@ def fileupload():
     print(request.form)
     # Setting headers
     headers = {
-        "Authorization": "Bearer 66f42689afb9a71c36f9de7a4825ad1517f1338619984a6d"
+        "Authorization": "Bearer a39a8f499cd150a6e6448339becfa5856d8a35b2e81e21b3"
     }
 
     # Open the file and make the query
