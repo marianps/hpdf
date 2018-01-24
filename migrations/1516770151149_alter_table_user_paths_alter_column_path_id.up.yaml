@@ -1,9 +1,0 @@
-- args:
-    sql: ALTER TABLE "user_paths" ALTER COLUMN "path_id" TYPE bigserial;
-  type: run_sql
-- args:
-    sql: ALTER TABLE ONLY "user_paths" ALTER COLUMN "path_id" SET DEFAULT nextval('user_paths_path_id_seq'::regclass);
-  type: run_sql
-- args:
-    sql: ALTER TABLE "user_paths" ALTER COLUMN "path_id" SET NOT NULL;
-  type: run_sql
