@@ -184,8 +184,6 @@ def login():
 
 
         flresp=filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
-        respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
-        respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
 
         if request.content_type == 'application/json':
             respo = make_response(resp.content+flresp)
@@ -254,13 +252,17 @@ def dregister():
         print(vauthdata['hasura_roles'])
 
         flresp=filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
-        respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
-        respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+
+        if request.content_type == 'application/json':
+            respo = make_response(resp.content+flresp)
+            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+        else:
+            respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
+            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
 
         return respo
     else:
         return resp.content
-
 
 @app.route("/fupload", methods = ['POST'])
 def fileupload():
@@ -272,11 +274,7 @@ def fileupload():
     print(request.form)
     print(request.json)
     print(request.cookies)
-
     vauth = request.cookies.get(CLUSTER_NAME)
-    vuser = request.cookies.get('username')
-    vhid = request.cookies.get('hasura_id')
-
     # Setting headers
     headers = {
         "Authorization": "Bearer " + vauth
@@ -290,7 +288,7 @@ def fileupload():
         fileup = request.files['hvfname']
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
-            fileup.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#            fileup.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     resp = requests.post(url, data=fileup, headers=headers)
 #    resp = requests.post(url, data=fileup)
