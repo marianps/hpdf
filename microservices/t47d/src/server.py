@@ -37,6 +37,41 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
+def filelist(vauth,vhid):
+
+    # This is the url to which the query is made
+    url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
+
+    # This is the json payload for the query
+    requestPayload1 = {
+        "type": "select",
+        "args": {
+            "table": "user_files",
+            "columns": [
+                "*"
+            ],
+            "where": {
+                "user_id": {
+                    "$eq": vhid
+                }
+            }
+        }
+    }
+
+    # Setting headers
+    headers1 = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+ vauth
+    }
+
+    # Make the query and store response in resp
+    resp1 = requests.request("POST", url1, data=json.dumps(requestPayload1), headers=headers1)
+
+    # resp.content contains the json response.
+    print(resp1.content)
+
+    return resp1.content
+
 
 @app.route("/")
 def home():
@@ -63,7 +98,7 @@ def login():
     # This is the url to which the query is made
     url = "https://auth." + CLUSTER_NAME + ".hasura-app.io/v1/login"
 #    print(request)
-#    print(request.headers)
+    print(request.headers)
 #    print(request.form)
 #    print(request.content_type)
     print(request.data)
@@ -211,7 +246,8 @@ def dregister():
         print(vauthdata['hasura_id'])
         print(vauthdata['hasura_roles'])
 
-        respo = make_response(redirect(url_for('homepage')))
+        flresp=filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
+        respo = make_response(redirect('homedrvie,html',vuser=vauthdata['username'], msg=flresp + resp.content))
         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
         respo.set_cookie('username', vauthdata['username'] )
         respo.set_cookie('hasura_id', vauthdata['hasura_id'] )
