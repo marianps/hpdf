@@ -184,7 +184,7 @@ def login():
 
 
         flresp=filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
-        respo = make_response(render_template('index.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
+        respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
         return respo
     else:
@@ -246,7 +246,7 @@ def dregister():
         print(vauthdata['hasura_roles'])
 
         flresp=filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
-        respo = make_response(render_template('index.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
+        respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
 
         return respo
