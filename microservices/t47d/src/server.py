@@ -319,7 +319,7 @@ def fileupload():
                     "user_id": vfileupload['user_id'],
                     "file_path_id": "1",
                     "file_name": filename,
-                    "file_id": vfileupload['"file_id']
+                    "file_id": vfileupload['file_id']
                 }
                 ]
             }
