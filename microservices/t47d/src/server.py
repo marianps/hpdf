@@ -294,7 +294,8 @@ def fileupload():
 #    resp = requests.post(url, data=fileup)
 
     # resp.content contains the json response.
-    print("file upload" + resp.content)
+    print("file upload")
+    print(resp.content)
     if(resp.status_code >= 200 and resp.status_code < 300):
         vfileupload = resp.json()
         print(vfileupload['file_id'])
