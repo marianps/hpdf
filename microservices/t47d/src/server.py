@@ -150,8 +150,8 @@ def login():
 
         respo = make_response(redirect(url_for('homepage')))
         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
-        respo.set_cookie(username, vauthdata['username'] )
-        respo.set_cookie(hasura_id, vauthdata['hasura_id'] )
+        respo.set_cookie('username', vauthdata['username'] )
+        respo.set_cookie('hasura_id', vauthdata['hasura_id'] )
         return respo
     else:
         return resp.content
@@ -213,8 +213,8 @@ def dregister():
 
         respo = make_response(redirect(url_for('homepage')))
         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
-        respo.set_cookie(username, vauthdata['username'] )
-        respo.set_cookie(hasura_id, vauthdata['hasura_id'] )
+        respo.set_cookie('username', vauthdata['username'] )
+        respo.set_cookie('hasura_id', vauthdata['hasura_id'] )
         return respo
     else:
         return resp.content
