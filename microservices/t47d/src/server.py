@@ -188,9 +188,12 @@ def login():
         if request.content_type == 'application/json':
             respo = make_response(resp.content+flresp)
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
+
         else:
             respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
-            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
+            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
 
         return respo
     else:
@@ -256,9 +259,12 @@ def dregister():
         if request.content_type == 'application/json':
             respo = make_response(resp.content+flresp)
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
+            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
+
         else:
             respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
+            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
 
         return respo
     else:
@@ -275,6 +281,9 @@ def fileupload():
     print(request.json)
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get(vauth)
+    vhid = request.headers.get(X-Hasura-User-Id)
+
     # Setting headers
     headers = {
         "Authorization": "Bearer " + vauth
@@ -336,11 +345,12 @@ def fileupload():
 
         # resp.content contains the json response.
         print(resp1.content)
+        flresp=filelist(vauth,vhid)
 
         if request.content_type == 'application/json':
             respo = make_response(resp.content+resp1.content)
         else:
-            respo = make_response(render_template('homedrive.html',vuser="Test", msg= resp.content, response1=resp1.content))
+            respo = make_response(render_template('homedrive.html',vuser=vuser, msg= resp.content, response1=flresp))
 
         return respo
     else:
