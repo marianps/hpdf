@@ -282,7 +282,7 @@ def fileupload():
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
-    vhid = request.headers.get(X-Hasura-User-Id)
+    vhid = request.headers.get('X-Hasura-User-Id')
 
     # Setting headers
     headers = {
