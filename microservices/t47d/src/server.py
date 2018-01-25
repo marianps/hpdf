@@ -255,10 +255,10 @@ def dregister():
 
         if request.content_type == 'application/json':
             respo = make_response(resp.content+flresp)
-            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
         else:
             respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
-            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
 
         return respo
     else:
@@ -294,10 +294,10 @@ def fileupload():
 #    resp = requests.post(url, data=fileup)
 
     # resp.content contains the json response.
-    print(resp.content)
+    print("file upload" + resp.content)
     if(resp.status_code >= 200 and resp.status_code < 300):
         vfileupload = resp.json()
-        print(vfileupload['"file_id'])
+        print(vfileupload['file_id'])
         print(vfileupload['user_id'])
         print(vfileupload['user_role'])
         print(vfileupload['content_type'])
@@ -336,7 +336,11 @@ def fileupload():
         # resp.content contains the json response.
         print(resp1.content)
 
-        respo = make_response(redirect(url_for('homepage')))
+        if request.content_type == 'application/json':
+            respo = make_response(resp.content+resp1.content)
+        else:
+            respo = make_response(render_template('homedrive.html',vuser="Test", msg= resp.content, response1=resp1.content))
+
         return respo
     else:
         return resp.content
