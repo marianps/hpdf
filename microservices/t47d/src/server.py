@@ -186,6 +186,14 @@ def login():
         flresp=filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
         respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+
+        if request.content_type == 'application/json':
+            respo = make_response(resp.content+flresp)
+            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+        else:
+            respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
+            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
+
         return respo
     else:
         return resp.content
@@ -253,49 +261,6 @@ def dregister():
     else:
         return resp.content
 
-@app.route("/hpage", methods = ['POST','GET'])
-def homepage():
-
-    vauth = request.cookies.get(CLUSTER_NAME)
-    vuser = request.cookies.get('username')
-    vhid = request.cookies.get('hasura_id')
-
-    # This is the url to which the query is made
-    url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
-
-    # This is the json payload for the query
-    requestPayload1 = {
-        "type": "select",
-        "args": {
-            "table": "user_files",
-            "columns": [
-                "*"
-            ],
-            "where": {
-                "user_id": {
-                    "$eq": vhid
-                }
-            }
-        }
-    }
-
-    # Setting headers
-    headers1 = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer "+ vauth
-    }
-
-    # Make the query and store response in resp
-    resp1 = requests.request("POST", url1, data=json.dumps(requestPayload1), headers=headers1)
-
-    # resp.content contains the json response.
-    print(resp1.content)
-
-    if request.content_type == 'application/json':
-        return resp1.content
-    else:
-        return (render_template('homedrive.html',name = vuser,msg = resp1.content))
-
 
 @app.route("/fupload", methods = ['POST'])
 def fileupload():
@@ -305,7 +270,6 @@ def fileupload():
     print(request)
     print(request.headers)
     print(request.form)
-    print(request.auth)
     print(request.json)
     print(request.cookies)
 
