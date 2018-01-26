@@ -37,25 +37,38 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-def r_filelist(vauth,vhid):
+def r_filelist(vauth,vhid,pthid):
     # This is the url to which the query is made
     url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
 
     # This is the json payload for the query
-    requestPayload1 = {
-        "type": "select",
-        "args": {
-            "table": "user_files",
-            "columns": [
-                "*"
-            ],
-            "where": {
-                "user_id": {
-                    "$eq": vhid
+requestPayload = {
+    "type": "select",
+    "args": {
+        "table": "user_files",
+        "columns": [
+            "file_name",
+            "file_id",
+            "file_path_id",
+            "created_at"
+        ],
+        "where": {
+            "$and": [
+                {
+                    "user_id": {
+                        "$eq": vhid
+                    }
+                },
+                {
+                    "file_path_id": {
+                        "$eq": pthid
+                    }
                 }
-            }
+            ]
         }
     }
+}
+
 
     # Setting headers
     headers1 = {
@@ -106,7 +119,7 @@ def r_userinfo(vauth,vhid):
     print(resp1.content)
     return resp1.content
 
-def i_fileupload(vauth,vhid,vpath,vfilename,vfileid):
+def i_fileupload(vauth,vhid,vpthid,vfilename,vfileid):
     # This is the url to which the query is made
     url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
 
@@ -118,7 +131,7 @@ def i_fileupload(vauth,vhid,vpath,vfilename,vfileid):
             "objects": [
                 {
                     "user_id": vhid,
-                    "file_path_id": vpath,
+                    "file_path_id": vpthid,
                     "file_name": vfilename,
                     "file_id": vfileid
                 }
@@ -271,7 +284,8 @@ def dregister():
         print(vauthdata['hasura_id'])
         print(vauthdata['hasura_roles'])
 
-        flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
+        usrinforp=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
+        flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],pthid)
 
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
@@ -342,6 +356,24 @@ def fileupload():
     else:
         return resp.content
 
+@app.route("/filelist", methods = ['POST','GET'])
+def filelist():
+    # This is the url to which the query is made
+    print(request)
+    print(request.headers)
+    print(request.form)
+    print(request.json)
+    print(request.cookies)
+    vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get(vauth)
+    vhid = request.headers.get('X-Hasura-User-Id')
+
+    if request.content_type == 'application/json':
+        respo=r_filelist(vauth,vhid)
+    else:
+        flresp=r_filelist(vauth,vhid)
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp, response1=""))
+    return respo
 
 # Handling all other request and robots.txt request
 @app.errorhandler(404)
