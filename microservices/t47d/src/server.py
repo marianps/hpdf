@@ -80,7 +80,7 @@ def r_folderlist(vauth,vhid,vpthid):
 
     # resp.content contains the json response.
     print(resp.content)
-    return resp.content
+    return resp
 
 def r_filelist(vauth,vhid,vpthid):
     # This is the url to which the query is made
@@ -271,19 +271,19 @@ def dlogin():
             respo = make_response(resp.content)
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-          #  respo.set_cookie('rtpthid', usrdt[0]['root_path_id'])
+            respo.set_cookie('rtpthid', usrdt['root_path_id'])
 
         else:
-           # fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
-           # flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
-            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=""))
-          #  respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
-          #  respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-          #  respo.set_cookie('rtpthid', usrdt[0]['root_path_id'])
+            fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
+            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
+            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=fldrresp.content + flresp.content))
+            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
+            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
+            respo.set_cookie('rtpthid', usrdt['root_path_id'])
 
         return respo
     else:
-        return resp.content
+        return resp
 
 @app.route("/dregister", methods = ['POST'])
 def dregister():
