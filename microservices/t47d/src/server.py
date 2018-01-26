@@ -191,7 +191,7 @@ def login():
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
 
         else:
-            respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
+            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
 
@@ -262,7 +262,7 @@ def dregister():
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
 
         else:
-            respo = make_response(render_template('homedrive.html',vuser=vauthdata['username'], msg= resp.content, response1=flresp))
+            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg= resp.content, response1=flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
 
@@ -350,7 +350,7 @@ def fileupload():
         if request.content_type == 'application/json':
             respo = make_response(resp.content+resp1.content)
         else:
-            respo = make_response(render_template('homedrive.html',vuser=vuser, msg= resp.content, response1=flresp))
+            respo = make_response(render_template('homedrive.html',name=vuser, msg= resp.content, response1=flresp))
 
         return respo
     else:
