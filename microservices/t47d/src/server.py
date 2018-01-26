@@ -496,7 +496,7 @@ def fileupload():
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
-    vpthid = request.cookies.get(rtpthid)
+    vpthid = request.cookies.get('rtpthid')
     vhid = request.headers.get('X-Hasura-User-Id')
 
     # Setting headers
@@ -549,7 +549,7 @@ def filelist():
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
-    vpthid = request.cookies.get(rtpthid)
+    vpthid = request.cookies.get('rtpthid')
     vhid = request.headers.get('X-Hasura-User-Id')
 
     if request.content_type == 'application/json':
