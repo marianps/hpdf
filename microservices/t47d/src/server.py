@@ -203,21 +203,19 @@ def dlogin():
         print(vauthdata['hasura_roles'])
 
         usrirep=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
-        authinfo= json.loads(resp.content)
-        usrinfo= json.loads(usrirep)
-        authinfo['user_info'] = usrinfo
-        userrepo=jsonify(authinfo)
-
+        usrdt = resusrirepp.json()
+        print(usrdt)
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
-            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'] )
-            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
+            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
+            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
+            respo.set_cookie('rtpthid', vauthdata['username'])
 
         else:
             flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
-            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=userrepo, response1=flresp))
+            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=usrirep+flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
-            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
+            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
 
         return respo
     else:
