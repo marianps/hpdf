@@ -279,7 +279,7 @@ def dlogin():
             respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=fldrresp.content + flresp.content))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-            respo.set_cookie('rtpthid', usrdt['root_path_id'])
+            respo.set_cookie('rtpthid', usrdt[0]['root_path_id'])
 
         return respo
     else:
