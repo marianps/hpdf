@@ -468,7 +468,7 @@ def dregister():
                         respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=cpthrep.content + rtfldr.content+cusrrep.content))
                         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-                        respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
+                        respo.set_cookie('rtpthid', fldrid))
 
                     return respo
                 #Failure of insert into App_user
