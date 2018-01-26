@@ -42,7 +42,7 @@ def r_filelist(vauth,vhid,pthid):
     url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
 
     # This is the json payload for the query
-    requestPayload = {
+    requestPayload1 = {
         "type": "select",
         "args": {
             "table": "user_files",
