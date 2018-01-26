@@ -203,7 +203,7 @@ def dlogin():
         print(vauthdata['hasura_roles'])
 
         usrirep=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
-        usrdt = resusrirepp.json()
+        usrdt = usrirep.json()
         print(usrdt)
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
