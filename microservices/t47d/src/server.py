@@ -284,8 +284,8 @@ def dregister():
         print(vauthdata['hasura_id'])
         print(vauthdata['hasura_roles'])
 
-        usrinforp=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
-        flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],pthid)
+        #usrinforp=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
+        #flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],1)
 
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
