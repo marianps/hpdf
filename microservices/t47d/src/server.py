@@ -79,11 +79,14 @@ def r_userinfo(vauth,vhid):
         "type": "select",
         "args": {
             "table": "app_users",
-              "columns": [
-            "*"
-        ],
-            "where": {
-                "hasura_id": {
+                "columns": [
+                    "username",
+                    "hasura_id",
+                    "root_path_id",
+                    "auth_token"
+                ],
+                "where": {
+                    "hasura_id": {
                     "$eq": +vhid
                 }
             }
