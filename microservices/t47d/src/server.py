@@ -206,6 +206,7 @@ def dlogin():
         authinfo= json.loads(resp.content)
         usrinfo= json.loads(usrirep)
         authinfo['user_info'] = usrinfo
+        userrepo=jsonify(authinfo)
 
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
@@ -214,7 +215,7 @@ def dlogin():
 
         else:
             flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
-            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=jsonify(authinfo), response1=flresp))
+            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=userrepo.content, response1=flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
 
