@@ -37,7 +37,52 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-def r_filelist(vauth,vhid,pthid):
+
+
+def r_folderlist(vauth,vhid,vpthid):
+    # This is the url to which the query is made
+    url = "https://data.anthology78.hasura-app.io/v1/query"
+
+    # This is the json payload for the query
+    requestPayload = {
+        "type": "select",
+        "args": {
+            "table": "user_paths",
+            "columns": [
+                "path_id",
+                "path_nm"
+            ],
+            "where": {
+                "$and": [
+                    {
+                        "user_id": {
+                            "$eq": vhid
+                        }
+                    },
+                    {
+                        "prnt_path_id": {
+                            "$eq": vpthid
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+    # Setting headers
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+ vauth
+    }
+
+    # Make the query and store response in resp
+    resp = requests.request("POST", url, data=json.dumps(requestPayload), headers=headers)
+
+    # resp.content contains the json response.
+    print(resp.content)
+    return resp.content
+
+def r_filelist(vauth,vhid,vpthid):
     # This is the url to which the query is made
     url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
 
@@ -61,7 +106,7 @@ def r_filelist(vauth,vhid,pthid):
                     },
                     {
                         "file_path_id": {
-                            "$eq": pthid
+                            "$eq": vpthid
                         }
                     }
                 ]
@@ -95,8 +140,7 @@ def r_userinfo(vauth,vhid):
                 "columns": [
                     "username",
                     "hasura_id",
-                    "root_path_id",
-                    "auth_token"
+                    "root_path_id"
                 ],
                 "where": {
                     "hasura_id": {
@@ -226,13 +270,15 @@ def dlogin():
             respo = make_response(resp.content)
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-            respo.set_cookie('rtpthid', vauthdata['username'])
+            respo.set_cookie('rtpthid', usrdt['root_path_id'])
 
         else:
-            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],"1")
-            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=usrirep+flresp))
+            fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt['root_path_id'])
+            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt['root_path_id'])
+            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=usrirep+fldrresp+flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
+            respo.set_cookie('rtpthid', usrdt['root_path_id'])
 
         return respo
     else:
@@ -284,18 +330,23 @@ def dregister():
         print(vauthdata['hasura_id'])
         print(vauthdata['hasura_roles'])
 
-        #usrinforp=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
-        #flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],1)
+        usrirep=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
+        usrdt = json.loads(usrirep)
 
+        print(usrdt)
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
-            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
+            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
+            respo.set_cookie('rtpthid', usrdt['root_path_id'])
 
         else:
-            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg= resp.content, response1=flresp))
+            fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt['root_path_id'])
+            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt['root_path_id'])
+            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=usrirep+fldrresp+flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
-            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
+            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
+            respo.set_cookie('rtpthid', usrdt['root_path_id'])
 
         return respo
     else:
@@ -313,6 +364,7 @@ def fileupload():
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
+    vpthid = request.cookies.get(vpthid)
     vhid = request.headers.get('X-Hasura-User-Id')
 
     # Setting headers
@@ -349,8 +401,9 @@ def fileupload():
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
         else:
-            flresp=r_filelist(vauth,vhid)
-            respo = make_response(render_template('homedrive.html',name=vuser, msg= resp.content+flinsresp, response1=flresp))
+            fldrresp=r_folderlist(vauth,vhid,vpthid)
+            flresp=r_filelist(vauth,vhid,vpthid)
+            respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content, response1=flinsresp+fldrresp+flresp))
 
         return respo
     else:
@@ -366,12 +419,33 @@ def filelist():
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
+    vpthid = request.cookies.get(vpthid)
     vhid = request.headers.get('X-Hasura-User-Id')
 
     if request.content_type == 'application/json':
-        respo=r_filelist(vauth,vhid)
+        respo=r_filelist(vauth,vhid,vpthid)
     else:
-        flresp=r_filelist(vauth,vhid)
+        flresp=r_filelist(vauth,vhid,vpthid)
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp, response1=""))
+    return respo
+
+@app.route("/fldrlist", methods = ['POST','GET'])
+def fldrlist():
+    # This is the url to which the query is made
+    print(request)
+    print(request.headers)
+    print(request.form)
+    print(request.json)
+    print(request.cookies)
+    vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get(vauth)
+    vpthid = request.cookies.get(vpthid)
+    vhid = request.headers.get('X-Hasura-User-Id')
+
+    if request.content_type == 'application/json':
+        respo=r_fldrlist(vauth,vhid,vpthid)
+    else:
+        flresp==r_fldrlist(vauth,vhid,vpthid)
         respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp, response1=""))
     return respo
 
