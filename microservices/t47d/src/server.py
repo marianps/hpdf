@@ -32,6 +32,8 @@ if CLUSTER_NAME is None:
 UPLOAD_FOLDER = '/fuploads/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','docx','xlsx','pptx','md'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+DEF_USR_PATH = '/'
+DEF_PRNT_PTHID = 0
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -163,6 +165,115 @@ def r_userinfo(vauth,vhid):
     print(resp1.content)
     return resp1
 
+def c_userdtl(vauth,vhid,usr,rtpthid):
+    # This is the url to which the query is made
+    url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
+
+    # This is the json payload for the query
+    requestPayload = {
+        "type": "insert",
+        "args": {
+            "table": "app_users",
+            "objects": [
+                {
+                    "username": usr,
+                    "hasura_id": vhid,
+                    "root_path_id": rtpthid
+                }
+            ]
+        }
+    }
+
+
+    # Setting headers
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+ vauth
+    }
+
+    # Make the query and store response in resp
+    resp1 = requests.request("POST", url1, data=json.dumps(requestPayload), headers=headers)
+
+    # resp.content contains the json response.
+    print(resp1.content)
+    return resp1
+
+
+def r_userrtfldr(vauth,vhid):
+    # This is the url to which the query is made
+    url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
+
+    # This is the json payload for the query
+    requestPayload = {
+        "type": "select",
+        "args": {
+            "table": "user_paths",
+            "columns": [
+                "path_id"
+            ],
+            "where": {
+                "$and": [
+                    {
+                        "user_id": {
+                            "$eq": vhid
+                        }
+                    },
+                    {
+                        "prnt_path_id": {
+                            "$eq": "0"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+    # Setting headers
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+ vauth
+    }
+
+    # Make the query and store response in resp
+    resp1 = requests.request("POST", url1, data=json.dumps(requestPayload), headers=headers)
+
+    # resp.content contains the json response.
+    print(resp1.content)
+    return resp1
+
+def c_userfldr(vauth,vhid,vprntpthid,pthnm):
+    # This is the url to which the query is made
+    url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
+
+    # This is the json payload for the query
+    requestPayload = {
+        "type": "insert",
+        "args": {
+            "table": "user_paths",
+            "objects": [
+                {
+                    "path_nm": pthnm,
+                    "prnt_path_id": vprntpthid,
+                    "user_id": vhid
+                }
+            ]
+        }
+}
+
+
+    # Setting headers
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+ vauth
+    }
+
+    # Make the query and store response in resp
+    resp1 = requests.request("POST", url1, data=json.dumps(requestPayload), headers=headers)
+
+    # resp.content contains the json response.
+    print(resp1.content)
+    return resp1
+
 def i_fileupload(vauth,vhid,vpthid,vfilename,vfileid):
     # This is the url to which the query is made
     url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
@@ -263,25 +374,28 @@ def dlogin():
         print(vauthdata['hasura_roles'])
 
         usrirep=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
-        usrdt = usrirep.json()
-        print(usrdt)
+        if(usrirep.status_code >= 200 and usrirep.status_code < 300):
+            usrdt = usrirep.json()
+            print(usrdt)
 
-        #print(usrdt[0]['root_path_id'])
-        if request.content_type == 'application/json':
-            respo = make_response(resp.content)
-            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
-            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-            respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
+            #print(usrdt[0]['root_path_id'])
+            if request.content_type == 'application/json':
+                respo = make_response(resp.content)
+                respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
+                respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
+                respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
 
+            else:
+                fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
+                flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
+                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=fldrresp.content + flresp.content))
+                respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
+                respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
+                respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
+
+            return respo
         else:
-            fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
-            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
-            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=fldrresp.content + flresp.content))
-            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
-            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-            respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
-
-        return respo
+            return usrirep
     else:
         return resp
 
@@ -331,27 +445,43 @@ def dregister():
         print(vauthdata['hasura_id'])
         print(vauthdata['hasura_roles'])
 
-        usrirep=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
-        #usrdt = json.loads(usrirep)
+        #Creating user root folder for newly created user
+        cpthrep=c_userfldr(vauthdata['auth_token'],vauthdata['hasura_id'],DEF_PRNT_PTHID,DEF_USR_PATH)
+        if (cpthrep.status_code >= 200 and cpthrep.status_code < 300):
+            # querying for User root folder id for newly created user
+            rtfldr=r_userrtfldr(vauthdata['auth_token'],vauthdata['hasura_id'])
+            if (rtfldr.status_code >= 200 and rtfldr.status_code < 300):
+                fldr = rtfldr.json()
+                fldrid=fldr[0]['path_id']
+                # Inserting the user in App_user table after successful user creation steps
+                cusrrep=c_userdtl(vauthdata['auth_token'],vauthdata['hasura_id'],vauthdata['username'],fldrid)
+                if (cusrrep.status_code >= 200 and cusrrep.status_code < 300):
+                    #print(usrdt[0]['root_path_id'])
+                    # Sending response back to UI with response of user creation and user cookies
+                    if request.content_type == 'application/json':
+                        respo = make_response(resp.content)
+                        respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
+                        respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
+                        respo.set_cookie('rtpthid', fldrid)
+                    else:
+                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=cpthrep.content + rtfldr.content+cusrrep.content))
+                        respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
+                        respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
+                        respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
 
-        print(usrdt)
-        if request.content_type == 'application/json':
-            respo = make_response(resp.content)
-            respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
-            respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-           #  respo.set_cookie('rtpthid', usrdt[0]['root_path_id'])
-
+                    return respo
+                #Failure of insert into App_user
+                else:
+                    return cusrrep
+            #Failure of query for new user root folder
+            else:
+                return rtfldr
+        #Failure of insert for new user root folder
         else:
-           # fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
-           # flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
-            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=""))
-          #  respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
-          #  respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-          #  respo.set_cookie('rtpthid', usrdt[0]['root_path_id'])
-
-        return respo
+            return cpthrep
+    #Failure of new user creation at Auth API Call
     else:
-        return resp.content
+        return resp
 
 @app.route("/fupload", methods = ['POST'])
 def fileupload():
@@ -365,15 +495,13 @@ def fileupload():
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
-    vpthid = request.cookies.get(vpthid)
+    vpthid = request.cookies.get(rtpthid)
     vhid = request.headers.get('X-Hasura-User-Id')
 
     # Setting headers
     headers = {
         "Authorization": "Bearer " + vauth
     }
-
-
     # Open the file
     if request.method =='POST':
 
@@ -408,7 +536,7 @@ def fileupload():
 
         return respo
     else:
-        return resp.content
+        return resp
 
 @app.route("/filelist", methods = ['POST','GET'])
 def filelist():
@@ -420,7 +548,7 @@ def filelist():
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
-    vpthid = request.cookies.get(vpthid)
+    vpthid = request.cookies.get(rtpthid)
     vhid = request.headers.get('X-Hasura-User-Id')
 
     if request.content_type == 'application/json':
