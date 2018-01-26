@@ -556,7 +556,7 @@ def filelist():
         respo=r_filelist(vauth,vhid,vpthid)
     else:
         flresp=r_filelist(vauth,vhid,vpthid)
-        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp,content, response1=""))
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, response1=""))
     return respo
 
 @app.route("/fldrlist", methods = ['POST','GET'])
