@@ -229,7 +229,7 @@ def dlogin():
             respo.set_cookie('rtpthid', vauthdata['username'])
 
         else:
-            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
+            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],"1")
             respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=usrirep+flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
