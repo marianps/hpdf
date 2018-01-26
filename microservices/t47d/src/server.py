@@ -178,7 +178,8 @@ def c_userdtl(vauth,vhid,usr,rtpthid):
                 {
                     "username": usr,
                     "hasura_id": vhid,
-                    "root_path_id": rtpthid
+                    "root_path_id": rtpthid,
+                    "auth_token": vauth
                 }
             ]
         }
