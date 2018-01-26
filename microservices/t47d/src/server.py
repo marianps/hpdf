@@ -533,7 +533,7 @@ def fileupload():
         else:
             fldrresp=r_folderlist(vauth,vhid,vpthid)
             flresp=r_filelist(vauth,vhid,vpthid)
-            respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content, response1=flinsresp+fldrresp+flresp))
+            respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content, response1=flinsresp.content+fldrresp.content+flresp.content))
 
         return respo
     else:
@@ -556,7 +556,7 @@ def filelist():
         respo=r_filelist(vauth,vhid,vpthid)
     else:
         flresp=r_filelist(vauth,vhid,vpthid)
-        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp, response1=""))
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp,content, response1=""))
     return respo
 
 @app.route("/fldrlist", methods = ['POST','GET'])
@@ -576,7 +576,7 @@ def fldrlist():
         respo=r_fldrlist(vauth,vhid,vpthid)
     else:
         flresp==r_fldrlist(vauth,vhid,vpthid)
-        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp, response1=""))
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, response1=""))
     return respo
 
 # Handling all other request and robots.txt request
