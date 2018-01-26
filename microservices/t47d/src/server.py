@@ -526,7 +526,7 @@ def fileupload():
         print(vfileupload['file_size'])
         vfileid=vfileupload['file_id']
 
-        flinsresp=i_fileupload(vauth,vhid,vpath,filename,vfileid)
+        flinsresp=i_fileupload(vauth,vhid,vpthid,filename,vfileid)
 
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
