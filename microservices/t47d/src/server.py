@@ -215,7 +215,7 @@ def dlogin():
 
         else:
             flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'])
-            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=userrepo.content, response1=flresp))
+            respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=userrepo, response1=flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'] )
 
