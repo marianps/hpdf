@@ -42,32 +42,32 @@ def r_filelist(vauth,vhid,pthid):
     url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
 
     # This is the json payload for the query
-requestPayload = {
-    "type": "select",
-    "args": {
-        "table": "user_files",
-        "columns": [
-            "file_name",
-            "file_id",
-            "file_path_id",
-            "created_at"
-        ],
-        "where": {
-            "$and": [
-                {
-                    "user_id": {
-                        "$eq": vhid
+    requestPayload = {
+        "type": "select",
+        "args": {
+            "table": "user_files",
+            "columns": [
+                "file_name",
+                "file_id",
+                "file_path_id",
+                "created_at"
+            ],
+            "where": {
+                "$and": [
+                    {
+                        "user_id": {
+                            "$eq": vhid
+                        }
+                    },
+                    {
+                        "file_path_id": {
+                            "$eq": pthid
+                        }
                     }
-                },
-                {
-                    "file_path_id": {
-                        "$eq": pthid
-                    }
-                }
-            ]
+                ]
+            }
         }
     }
-}
 
 
     # Setting headers
