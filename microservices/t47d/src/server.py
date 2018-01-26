@@ -204,7 +204,7 @@ def dlogin():
 
         usrirep=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
         authinfo= json.loads(resp.content)
-        usrinfo= json.loads(usrirep.content)
+        usrinfo= json.loads(usrirep)
         authinfo['user_info'] = usrinfo
 
         if request.content_type == 'application/json':
