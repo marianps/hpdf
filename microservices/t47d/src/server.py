@@ -263,8 +263,9 @@ def dlogin():
         print(vauthdata['hasura_roles'])
 
         usrirep=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
-        #usrdt = json.loads(usrirep)
-        print(usrirep.content)
+        usrdt = usrirep.json()
+        print(usrdt)
+
         #print(usrdt[0]['root_path_id'])
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
