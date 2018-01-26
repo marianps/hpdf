@@ -265,20 +265,20 @@ def dlogin():
         usrirep=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
         usrdt = json.loads(usrirep)
         print(usrdt)
-
+        print(usrdt[0]['root_path_id'])
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-            respo.set_cookie('rtpthid', usrdt['root_path_id'])
+            respo.set_cookie('rtpthid', usrdt[0]['root_path_id'])
 
         else:
-            fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt['root_path_id'])
-            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt['root_path_id'])
+            fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
+            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
             respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=usrirep+fldrresp+flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-            respo.set_cookie('rtpthid', usrdt['root_path_id'])
+            respo.set_cookie('rtpthid', usrdt[0]['root_path_id'])
 
         return respo
     else:
@@ -338,15 +338,15 @@ def dregister():
             respo = make_response(resp.content)
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-            respo.set_cookie('rtpthid', usrdt['root_path_id'])
+            respo.set_cookie('rtpthid', usrdt[0]['root_path_id'])
 
         else:
-            fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt['root_path_id'])
-            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt['root_path_id'])
+            fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
+            flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
             respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=usrirep+fldrresp+flresp))
             respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
             respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
-            respo.set_cookie('rtpthid', usrdt['root_path_id'])
+            respo.set_cookie('rtpthid', usrdt[0]['root_path_id'])
 
         return respo
     else:
