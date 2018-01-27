@@ -389,7 +389,7 @@ def dlogin():
             else:
                 fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
                 flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
-                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, fldr=jsonify(fldrresp.content),fllst=jsonify(flresp.content))
+                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, fldr=fldrresp.content, fllst=flresp.content))
                 respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                 respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                 respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))

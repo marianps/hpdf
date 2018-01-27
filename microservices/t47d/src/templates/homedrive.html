@@ -15,12 +15,12 @@
         <p><a href="fileupload.html" target="_self">Create Folder</a></p>
         <p><input type="submit" value="Create Folder" name="createfldr" ></p>
         <p>Folder List:{{ fldr }}!</p>
-        <p>{% for vfldr in fldr %}</p>
-        <div>{{ vfldr.file_path_id }} - {{ vfldr.path_nm }}</div>
+        <p>{% for row in fldr %}</p>
+        <div>{{ row['file_path_id'] }} - {{ row['path_nm'] }}</div>
         {% endfor %}
         <p>File List:{{ fllst }}!</p>
         <p>{% for vfllst in fllst %}</p>
-        <div>{{ vfllst.file_name }} - {{ vfllst.file_id }}-{{ vfllst.file_path_id }}- {{ vfllst.created_at }}</div>
+        <div>{{ vfllst['file_name'] }} - {{ vfllst['file_id'] }}-{{ vfllst['file_path_id'] }}- {{ vfllst['created_at'] }}</div>
         {% endfor %}
 
         <p><h3><a href="/dlogout"/> Logout</h3></p>
