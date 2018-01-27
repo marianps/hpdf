@@ -15,11 +15,11 @@
         <p><a href="/cfldr" target="_self">Create Folder</a></p>
         <p>Folder List:{{ fldr }}!</p>
         <p>{% for row in fldr %}</p>
-        <div>{{ row['file_path_id']|string }} - {{ row['path_nm'] }}</div>
+        <div>{{ row['file_path_id'] | string }} - {{ row['path_nm'] }}</div>
         {% endfor %}
         <p>File List:{{ fllst }}!</p>
         <p>{% for vfllst in fllst %}</p>
-        <div>{{ vfllst['file_name'] }} - {{ vfllst['file_id'] }}-{{ vfllst['file_path_id']|string }}- {{ vfllst['created_at'] }}</div>
+        <div>{{ vfllst['file_name'] }} - {{ vfllst['file_id'] }}-{{ vfllst['file_path_id'] | string }}- {{ vfllst['created_at'] }}</div>
         {% endfor %}
         <p><input type="hidden" name="fldrid"></p>
         <p><h3><a href="/dlogout"/> Logout</h3></p>

@@ -398,6 +398,8 @@ def dlogin():
             else:
                 fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
                 flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
+                print(fldrresp.json())
+                print(flresp.json())
                 respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, fldr=fldrresp.json(), fllst=flresp.json()))
                 respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                 respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
@@ -521,7 +523,7 @@ def fldrcreate():
             else:
                 fldrresp=r_folderlist(vauth,vhid,vpthid)
                 flresp=r_filelist(vauth,vhid,vpthid)
-                respo = make_response(render_template('homedrive.html', name=vuser, msg=cpthrep.content, fldr=fldrresp.content,fllst=flresp.content))
+                respo = make_response(render_template('homedrive.html', name=vuser, msg=cpthrep.content, fldr=fldrresp.json(), fllst=flresp.json()))
             return respo
         #Failure of insert for new user root folder
         else:
@@ -578,7 +580,7 @@ def fileupload():
         else:
             fldrresp=r_folderlist(vauth,vhid,vpthid)
             flresp=r_filelist(vauth,vhid,vpthid)
-            respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content + flinsresp.content, fldr=fldrresp.content,fllst=flresp.content))
+            respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content + flinsresp.content, fldr=fldrresp.json(), fllst=flresp.json()))
 
         return respo
     else:
@@ -601,7 +603,7 @@ def filelist():
         respo=r_filelist(vauth,vhid,vpthid)
     else:
         flresp=r_filelist(vauth,vhid,vpthid)
-        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr="",fllst=flresp.content))
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr="",fllst=flresp.json))
     return respo
 
 @app.route("/fldrlist", methods = ['POST','GET'])
@@ -621,7 +623,7 @@ def fldrlist():
         respo=r_fldrlist(vauth,vhid,vpthid)
     else:
         flresp==r_fldrlist(vauth,vhid,vpthid)
-        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.content,fllst=""))
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.json(),fllst=""))
     return respo
 
 @app.route("/dlogout")
