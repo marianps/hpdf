@@ -16,11 +16,11 @@
         <p><input type="text" maxlength=20 name="hvfldrname" ></p>
         <p><input type="submit" value="Create Folder" name="createfldr" ></p>
         <p>Folder List:{{ fldr }}!</p>
-        <p>{% for key, value in fldr.items() %}</p>
+        <p>{% for key, value in fldr %}</p>
         <p><strong>{{ key }}</strong><span>{{ value }}</span></p>
         {% endfor %}
         <p>File List:{{ fllst }}!</p>
-        <p>{% for key, value in fllst.items() %}</p>
+        <p>{% for key, value in fllst %}</p>
         <p><strong>{{ key }}</strong><span>{{ value }}</span></p>
         {% endfor %}
 
