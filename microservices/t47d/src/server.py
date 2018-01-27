@@ -389,7 +389,7 @@ def dlogin():
             else:
                 fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
                 flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
-                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=fldrresp.content + flresp.content))
+                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, fldr=fldrresp.content,fllst=flresp.content))
                 respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                 respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                 respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
@@ -465,7 +465,7 @@ def dregister():
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
                     else:
-                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, response1=cpthrep.content + rtfldr.content+cusrrep.content))
+                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content + cpthrep.content +rtfldr.content+cusrrep.content, fldr="",fllst=""))
                         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
@@ -482,7 +482,43 @@ def dregister():
             return cpthrep
     #Failure of new user creation at Auth API Call
     else:
-        return resp
+        return resp.content
+
+@app.route("/fldrcreate", methods = ['POST'])
+def fldrcreate():
+    vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get(vauth)
+    vpthid = request.cookies.get('rtpthid')
+    vhid = request.headers.get('X-Hasura-User-Id')
+
+    print(request.content_type)
+    print(request.data)
+    print(request.json)
+    print(request.is_json)
+    content = request.json
+
+    if request.method == 'POST':
+        if request.content_type == 'application/json':
+            vfldrname = content['hvfldrname']
+        else:
+            vfldrname = request.form['hvfldrname']
+
+        #Creating user root folder for newly created user
+        cpthrep=c_userfldr(vauth,vhid,vpthid,vfldrname)
+        if (cpthrep.status_code >= 200 and cpthrep.status_code < 300):
+            # querying for User root folder id for newly created user
+            if request.content_type == 'application/json':
+                respo = make_response(resp.content)
+            else:
+                fldrresp=r_folderlist(vauth,vhid,vpthid)
+                flresp=r_filelist(vauth,vhid,vpthid)
+                respo = make_response(render_template('homedrive.html', name=vuser, msg=cpthrep.content, fldr=fldrresp.content,fllst=flresp.content))
+            return respo
+        #Failure of insert for new user root folder
+        else:
+            return cpthrep
+    else:
+        return "invalid request"
 
 @app.route("/fupload", methods = ['POST'])
 def fileupload():
@@ -533,11 +569,11 @@ def fileupload():
         else:
             fldrresp=r_folderlist(vauth,vhid,vpthid)
             flresp=r_filelist(vauth,vhid,vpthid)
-            respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content, response1=flinsresp.content+fldrresp.content+flresp.content))
+            respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content + flinsresp.content, fldr=fldrresp.content,fllst=flresp.content))
 
         return respo
     else:
-        return resp
+        return resp.content
 
 @app.route("/filelist", methods = ['POST','GET'])
 def filelist():
@@ -556,7 +592,7 @@ def filelist():
         respo=r_filelist(vauth,vhid,vpthid)
     else:
         flresp=r_filelist(vauth,vhid,vpthid)
-        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, response1=""))
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr="",fllst=flresp.content))
     return respo
 
 @app.route("/fldrlist", methods = ['POST','GET'])
@@ -576,7 +612,7 @@ def fldrlist():
         respo=r_fldrlist(vauth,vhid,vpthid)
     else:
         flresp==r_fldrlist(vauth,vhid,vpthid)
-        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, response1=""))
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.content,fllst=""))
     return respo
 
 # Handling all other request and robots.txt request
