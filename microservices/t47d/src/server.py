@@ -52,7 +52,8 @@ def r_folderlist(vauth,vhid,vpthid):
             "table": "user_paths",
             "columns": [
                 "path_nm",
-                "path_id"
+                "path_id",
+                "prnt_path_id"
             ],
             "where": {
                 "$and": [
