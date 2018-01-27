@@ -323,6 +323,10 @@ def json_message():
 def index():
     return render_template('dlogin.html')
 
+@app.route("/cfldr")
+def index():
+    return render_template('cfldr.html')
+
 @app.route("/regdisplay", methods = ['POST', 'GET'])
 def registerpage():
     return render_template('dregister.html')
