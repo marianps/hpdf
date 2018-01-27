@@ -13,15 +13,14 @@
         <p><input type="file" name="hvfname"></p>
         <p><input type="submit" value="Upload File" name="submit"></p>
         <p><a href="fileupload.html" target="_self">Create Folder</a></p>
-        <p><input type="text" maxlength=20 name="hvfldrname" ></p>
         <p><input type="submit" value="Create Folder" name="createfldr" ></p>
         <p>Folder List:{{ fldr }}!</p>
-        <p>{% for key, value in fldr %}</p>
-        <p><strong>{{ key }}</strong><span>{{ value }}</span></p>
+        <p>{% for vfldr in fldr %}</p>
+        <div>{{ vfldr.file_path_id }} - {{ vfldr.path_nm }}</div>
         {% endfor %}
         <p>File List:{{ fllst }}!</p>
-        <p>{% for key, value in fllst %}</p>
-        <p><strong>{{ key }}</strong><span>{{ value }}</span></p>
+        <p>{% for vfllst in fllst %}</p>
+        <div>{{ vfllst.file_name }} - {{ fllst.file_id }}-{{ fllst.file_path_id }}- {{ fllst.created_at }}</div>
         {% endfor %}
 
         <p><h3><a href="/dlogout"/> Logout</h3></p>
