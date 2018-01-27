@@ -43,7 +43,7 @@ def allowed_file(filename):
 
 def r_folderlist(vauth,vhid,vpthid):
     # This is the url to which the query is made
-    url = "https://data.anthology78.hasura-app.io/v1/query"
+    url = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
 
     # This is the json payload for the query
     requestPayload = {
@@ -275,7 +275,7 @@ def c_userfldr(vauth,vhid,vprntpthid,pthnm):
     print(resp1.content)
     return resp1
 
-def i_fileupload(vauth,vhid,vpthid,vfilename,vfileid):
+def c_fileupload(vauth,vhid,vpthid,vfilename,vfileid):
     # This is the url to which the query is made
     url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
 
@@ -307,6 +307,11 @@ def i_fileupload(vauth,vhid,vpthid,vfilename,vfileid):
     # resp.content contains the json response.
     print(resp1.content)
     return resp1
+
+def r_filedwnld(vauth,vhid,vpthid,vfilename,vfileid):
+
+    return "Download file"
+
 
 @app.route("/")
 def home():
@@ -566,7 +571,7 @@ def fileupload():
         print(vfileupload['file_size'])
         vfileid=vfileupload['file_id']
 
-        flinsresp=i_fileupload(vauth,vhid,vpthid,filename,vfileid)
+        flinsresp=c_fileupload(vauth,vhid,vpthid,filename,vfileid)
 
         if request.content_type == 'application/json':
             respo = make_response(resp.content)
@@ -609,7 +614,7 @@ def fldrlist():
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
-    vpthid = request.cookies.get(vpthid)
+    vpthid = request.cookies.get('rtpthid')
     vhid = request.headers.get('X-Hasura-User-Id')
 
     if request.content_type == 'application/json':
@@ -617,6 +622,44 @@ def fldrlist():
     else:
         flresp==r_fldrlist(vauth,vhid,vpthid)
         respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.content,fllst=""))
+    return respo
+
+@app.route("/dlogout")
+def dlogout():
+
+    print(request)
+    print(request.headers)
+    print(request.form)
+    print(request.json)
+    print(request.cookies)
+    vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get(vauth)
+    vpthid = request.cookies.get('rtpthid')
+    vhid = request.headers.get('X-Hasura-User-Id')
+
+    # This is the url to which the query is made
+    url = "https://auth." + CLUSTER_NAME + ".hasura-app.io/v1/user/logout"
+
+    # This is the json payload for the query
+    # Setting headers
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+vauth
+    }
+
+    # Make the query and store response in resp
+    resp = requests.request("POST", url, headers=headers)
+
+    # resp.content contains the json response.
+    print(resp.content)
+    if request.content_type == 'application/json':
+        respo=make_response(resp)
+        respo.set_cookie(CLUSTER_NAME, expires=0)
+        respo.set_cookie(vauth, expires=0)
+        respo.set_cookie('rtpthid', expires=0)
+
+    else:
+        respo = make_response(render_template('dlogin.html'))
     return respo
 
 # Handling all other request and robots.txt request
