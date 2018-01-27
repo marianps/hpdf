@@ -553,38 +553,45 @@ def fileupload():
     # Open the file
     if request.method =='POST':
 
-        fileup = request.files['hvfname']
+        content = request.json
+        if request.content_type == 'application/json':
+            fileup = content['hvfldrname']
+        else:
+            fileup = request.form['hvfldrname']
+
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
 
-    resp = requests.post(url, data=fileup, headers=headers)
+        resp = requests.post(url, data=fileup, headers=headers)
 
     # resp.content contains the json response.
-    print(resp.content)
+        print(resp.content)
 
-    if(resp.status_code >= 200 and resp.status_code < 300):
-        vfileupload = resp.json()
-        print(vfileupload['file_id'])
-        print(vfileupload['user_id'])
-        print(vfileupload['user_role'])
-        print(vfileupload['content_type'])
-        print(vfileupload['file_status'])
-        print(vfileupload['created_at'])
-        print(vfileupload['file_size'])
-        vfileid=vfileupload['file_id']
+        if(resp.status_code >= 200 and resp.status_code < 300):
+            vfileupload = resp.json()
+            print(vfileupload['file_id'])
+            print(vfileupload['user_id'])
+            print(vfileupload['user_role'])
+            print(vfileupload['content_type'])
+            print(vfileupload['file_status'])
+            print(vfileupload['created_at'])
+            print(vfileupload['file_size'])
+            vfileid=vfileupload['file_id']
 
-        flinsresp=c_fileupload(vauth,vhid,vpthid,filename,vfileid)
+            flinsresp=c_fileupload(vauth,vhid,vpthid,filename,vfileid)
 
-        if request.content_type == 'application/json':
-            respo = make_response(resp.content)
+            if request.content_type == 'application/json':
+                respo = make_response(resp.content)
+            else:
+                fldrresp=r_folderlist(vauth,vhid,vpthid)
+                flresp=r_filelist(vauth,vhid,vpthid)
+                respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content + flinsresp.content, fldr=fldrresp.json(), fllst=flresp.json()))
+
+            return respo
         else:
-            fldrresp=r_folderlist(vauth,vhid,vpthid)
-            flresp=r_filelist(vauth,vhid,vpthid)
-            respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content + flinsresp.content, fldr=fldrresp.json(), fllst=flresp.json()))
-
-        return respo
+            return resp.content
     else:
-        return resp.content
+        return "failed call"
 
 @app.route("/filelist", methods = ['POST','GET'])
 def filelist():
@@ -599,11 +606,18 @@ def filelist():
     vpthid = request.cookies.get('rtpthid')
     vhid = request.headers.get('X-Hasura-User-Id')
 
+    content = request.json
+    if request.content_type == 'application/json':
+        vpthid = content['hvfldr']
+    else:
+        vpthid = request.form['hvfldr']
+
     if request.content_type == 'application/json':
         respo=r_filelist(vauth,vhid,vpthid)
     else:
-        flresp=r_filelist(vauth,vhid,vpthid)
-        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr="",fllst=flresp.json))
+       fldrresp==r_fldrlist(vauth,vhid,vpthid)
+       flresp=r_filelist(vauth,vhid,vpthid)
+       respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.json(),fllst=flresp.json))
     return respo
 
 @app.route("/fldrlist", methods = ['POST','GET'])
@@ -619,11 +633,19 @@ def fldrlist():
     vpthid = request.cookies.get('rtpthid')
     vhid = request.headers.get('X-Hasura-User-Id')
 
+    content = request.json
+    if request.content_type == 'application/json':
+        vpthid = content['hvfldr']
+    else:
+        vpthid = request.form['hvfldr']
+
     if request.content_type == 'application/json':
         respo=r_fldrlist(vauth,vhid,vpthid)
     else:
-        flresp==r_fldrlist(vauth,vhid,vpthid)
-        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.json(),fllst=""))
+        fldrresp==r_fldrlist(vauth,vhid,vpthid)
+        flresp=r_filelist(vauth,vhid,vpthid)
+
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.json(),fllst=flresp.json()))
     return respo
 
 @app.route("/dlogout")

@@ -17,6 +17,11 @@
         <p>{% for row in fldr %}</p>
         <div> {{ row['path_nm'] }} - {{ row['file_path_id'] | string }} </div>
         {% endfor %}
+        <p><select name="hvfldr">
+        {% for item in fldr %}
+                <option  value="{{row['file_path_id']}}">{{row['path_nm']}}</option>
+        {% endfor %}
+        </select></p>
         <p>File List:{{ fllst }}!</p>
         <p>{% for vfllst in fllst %}</p>
         <div>{{ vfllst['file_name'] }} - {{ vfllst['file_id'] }}-{{ vfllst['file_path_id'] | string }}- {{ vfllst['created_at'] }}</div>
