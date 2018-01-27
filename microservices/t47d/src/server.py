@@ -324,7 +324,7 @@ def index():
     return render_template('dlogin.html')
 
 @app.route("/cfldr")
-def index():
+def cfldr():
     return render_template('cfldr.html')
 
 @app.route("/regdisplay", methods = ['POST', 'GET'])
