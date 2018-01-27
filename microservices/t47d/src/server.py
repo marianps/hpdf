@@ -5,6 +5,8 @@ import requests
 from flask import jsonify, render_template, request, make_response, json
 from flask import redirect, url_for
 from werkzeug import secure_filename
+import shutil
+
 #-------------------------------------------------------------------------------
 # Name:        DriveClone
 # Purpose:
@@ -310,8 +312,21 @@ def c_fileupload(vauth,vhid,vpthid,vfilename,vfileid):
     return resp1
 
 def r_filedwnld(vauth,vhid,vpthid,vfilename,vfileid):
+    # This is the url to which the query is made
+    url = "https://filestore." + CLUSTER_NAME + ".hasura-app.io/v1/file/"+vfileid
 
-    return "Download file"
+    # Change the name of the file and the extension based on the file being downloaded
+    filename = vfilename
+
+    # Make the query
+    resp = requests.get(url, stream=TRUE)
+
+    # Save the data into the file
+    #with open(filename, 'wb') as file_image
+    #shutil.copyfileobj(resp.raw, file_image)
+
+    print(resp.content)
+    return resp.raw
 
 
 @app.route("/")
@@ -686,6 +701,37 @@ def dlogout():
     else:
         respo = make_response(render_template('dlogin.html'))
     return respo
+
+@app.route("/dlwnload/<vfileid>")
+def dlwnload(vfileid):
+
+    print(request)
+    print(request.headers)
+    print(request.form)
+    print(request.json)
+    print(request.cookies)
+    vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get(vauth)
+    vpthid = request.cookies.get('rtpthid')
+    vhid = request.headers.get('X-Hasura-User-Id')
+
+    # This is the url to which the query is made
+    url = "https://filestore.anthology78.hasura-app.io/v1/file/"+vfileid
+
+    # This is the json payload for the query
+    # Setting headers
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+vauth
+    }
+    filename = "downloadedFile.png"
+
+    # Make the query
+    resp = requests.get(url, stream=TRUE)
+
+    with open(filename, 'wb') as filehd:
+        shutil.copyfileobj(resp.raw, filehd)
+    return filehd
 
 # Handling all other request and robots.txt request
 @app.errorhandler(404)

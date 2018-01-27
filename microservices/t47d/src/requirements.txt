@@ -2,5 +2,6 @@ flask
 requests
 gunicorn
 werkzeug
+shutil
 
 # add new packages one per each line
