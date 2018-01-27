@@ -20,7 +20,7 @@
         {% endfor %}
         <p>File List:{{ fllst }}!</p>
         <p>{% for vfllst in fllst %}</p>
-        <div>{{ vfllst.file_name }} - {{ fllst.file_id }}-{{ fllst.file_path_id }}- {{ fllst.created_at }}</div>
+        <div>{{ vfllst.file_name }} - {{ vfllst.file_id }}-{{ vfllst.file_path_id }}- {{ vfllst.created_at }}</div>
         {% endfor %}
 
         <p><h3><a href="/dlogout"/> Logout</h3></p>
