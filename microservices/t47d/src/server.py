@@ -34,6 +34,7 @@ if CLUSTER_NAME is None:
 UPLOAD_FOLDER = '/fuploads/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','docx','xlsx','pptx','md'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SESSION_COOKIE_HTTPONLY'] = False
 DEF_USR_PATH = '/'
 DEF_PRNT_PTHID = 0
 
