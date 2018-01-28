@@ -501,19 +501,25 @@ def dregister():
                 if (cusrrep.status_code >= 200 and cusrrep.status_code < 300):
                     #print(usrdt[0]['root_path_id'])
                     # Sending response back to UI with response of user creation and user cookies
+
+                    data_app = {}
+                    data_app["auth_token"] = vauthdata['auth_token']
+                    data_app["username"] = vauthdata['username']
+                    data_app["hasura_id"] = vauthdata['hasura_id']
+                    data_app["hasura_roles"] = vauthdata['hasura_roles']
+                    data_app["rtpthid"] = str(fldrid)
+                    json_app = json.dumps(data_app)
+                    print ('JSON: ', json_app)
+
                     if request.content_type == 'application/json':
-                        respo = make_response(resp.content)
-                        respo.headers[CLUSTER_NAME] = vauthdata['auth_token']
-                        respo.headers[vauthdata['auth_token']] = vauthdata['username']
-                        respo.headers['rtpthid'] = str(usrdt[0]['root_path_id'])
+                        #respo = make_response(resp.content)
+                        respo = make_response(json_app)
                         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
                     else:
-                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content + cpthrep.content +rtfldr.content+cusrrep.content, fldr="",fllst=""))
-                        respo.headers[CLUSTER_NAME] = vauthdata['auth_token']
-                        respo.headers[vauthdata['auth_token']] = vauthdata['username']
-                        respo.headers['rtpthid'] = str(usrdt[0]['root_path_id'])
+                        #respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content + cpthrep.content +rtfldr.content+cusrrep.content, fldr="",fllst=""))
+                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app + cpthrep.content +rtfldr.content+cusrrep.content, fldr="",fllst=""))
                         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
@@ -590,8 +596,8 @@ def fileupload():
     # Open the file
     if request.method =='POST':
 
-        content = request.json
         if request.content_type == 'application/json':
+            content = request.json
             fileup = content['hvfldrname']
         else:
             fileup = request.form['hvfldrname']
