@@ -413,7 +413,7 @@ def dlogin():
             data_app["hasura_id"] = vauthdata['hasura_id']
             data_app["hasura_roles"] = vauthdata['hasura_roles']
             data_app["rtpthid"] = str(usrdt[0]['root_path_id'])
-            json_app = json.dumps(data_app)
+            json_app = jsonify(data_app)
             print ('JSON: ', json_app)
 
             #print(usrdt[0]['root_path_id'])
