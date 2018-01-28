@@ -409,6 +409,9 @@ def dlogin():
             #print(usrdt[0]['root_path_id'])
             if request.content_type == 'application/json':
                 respo = make_response(resp.content)
+                response.headers[CLUSTER_NAME] = vauthdata['auth_token']
+                response.headers[vauthdata['auth_token']] = vauthdata['username']
+                response.headers['rtpthid'] = str(usrdt[0]['root_path_id'])
                 respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                 respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                 respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
@@ -419,6 +422,9 @@ def dlogin():
                 print(fldrresp.json())
                 print(flresp.json())
                 respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, fldr=fldrresp.json(), fllst=flresp.json()))
+                response.headers[CLUSTER_NAME] = vauthdata['auth_token']
+                response.headers[vauthdata['auth_token']] = vauthdata['username']
+                response.headers['rtpthid'] = str(usrdt[0]['root_path_id'])
                 respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                 respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                 respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
@@ -490,11 +496,17 @@ def dregister():
                     # Sending response back to UI with response of user creation and user cookies
                     if request.content_type == 'application/json':
                         respo = make_response(resp.content)
+                        response.headers[CLUSTER_NAME] = vauthdata['auth_token']
+                        response.headers[vauthdata['auth_token']] = vauthdata['username']
+                        response.headers['rtpthid'] = str(usrdt[0]['root_path_id'])
                         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
                     else:
                         respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content + cpthrep.content +rtfldr.content+cusrrep.content, fldr="",fllst=""))
+                        response.headers[CLUSTER_NAME] = vauthdata['auth_token']
+                        response.headers[vauthdata['auth_token']] = vauthdata['username']
+                        response.headers['rtpthid'] = str(usrdt[0]['root_path_id'])
                         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
@@ -734,6 +746,11 @@ def dlwnload(vfileid):
     with open(filename, 'wb') as filehd:
         shutil.copyfileobj(resp.raw, filehd)
     return filehd
+
+@app.after_request
+def apply_caching(response):
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    return response
 
 # Handling all other request and robots.txt request
 @app.errorhandler(404)
