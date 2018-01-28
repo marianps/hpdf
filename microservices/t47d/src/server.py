@@ -602,7 +602,7 @@ def fileupload():
         resp = requests.post(url, data=fileup, headers=headers)
 
     # resp.content contains the json response.
-        print(resp.content)
+        print("filestore call",resp.content)
 
         if(resp.status_code >= 200 and resp.status_code < 300):
             vfileupload = resp.json()
