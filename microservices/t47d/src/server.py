@@ -411,7 +411,7 @@ def dlogin():
             data_app["auth_token"] = vauthdata['auth_token']
             data_app["username"] = vauthdata['username']
             data_app["hasura_id"] = vauthdata['hasura_id']
-            data_app["auth_token"] = vauthdata['hasura_roles']
+            data_app["hasura_roles"] = vauthdata['hasura_roles']
             data_app["rtpthid"] = str(usrdt[0]['root_path_id'])
             json_app = json.dumps(data_app)
             print ('JSON: ', json_app)
