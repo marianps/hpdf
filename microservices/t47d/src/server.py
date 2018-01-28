@@ -407,18 +407,18 @@ def dlogin():
             print(usrdt)
 
 
+            json_app = json.dumps({})
+            json_app["auth_token"] = vauthdata['auth_token']
+            json_app["username"] = vauthdata['username']
+            json_app["hasura_id"] = vauthdata['hasura_id']
+            json_app["auth_token"] = vauthdata['hasura_roles']
+            json_app["rtpthid"] = str(usrdt[0]['root_path_id'])
 
+            print ('JSON: ', json_app)
 
             #print(usrdt[0]['root_path_id'])
             if request.content_type == 'application/json':
-                json_app = json.dumps({})
-                json_app["auth_token"] = vauthdata['auth_token']
-                json_app["username"] = vauthdata['username']
-                json_app["hasura_id"] = vauthdata['hasura_id']
-                json_app["auth_token"] = vauthdata['hasura_roles']
-                json_app["rtpthid"] = str(usrdt[0]['root_path_id'])
 
-                print ('JSON: ', json_app)
                 #respo = make_response(resp.content)
                 respo = make_response(json_app)
                 respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
@@ -430,7 +430,8 @@ def dlogin():
                 flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
                 print(fldrresp.json())
                 print(flresp.json())
-                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, fldr=fldrresp.json(), fllst=flresp.json()))
+                #respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, fldr=fldrresp.json(), fllst=flresp.json()))
+                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app, fldr=fldrresp.json(), fllst=flresp.json()))
                 respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                 respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                 respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
