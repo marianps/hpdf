@@ -5,7 +5,7 @@ import requests
 from flask import jsonify, render_template, request, make_response, json
 from flask import redirect, url_for
 from werkzeug import secure_filename
-import shutil
+#import shutil
 
 #-------------------------------------------------------------------------------
 # Name:        DriveClone
