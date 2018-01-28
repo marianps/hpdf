@@ -519,7 +519,7 @@ def dregister():
                         respo.set_cookie('rtpthid', str(fldrid))
                     else:
                         #respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content + cpthrep.content +rtfldr.content+cusrrep.content, fldr="",fllst=""))
-                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app + cpthrep.content +rtfldr.content+cusrrep.content, fldr="",fllst=""))
+                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app , fldr="", fllst=""))
                         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
