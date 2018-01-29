@@ -681,7 +681,7 @@ def fileupload():
         return "failed call"
 
 
-@app.route("/fchge/<vpthnm>", methods = ['POST'])
+@app.route("/fchge/<vpthnm>", methods = ['GET'])
 def fchge(vpthnm):
 
     print(request)
