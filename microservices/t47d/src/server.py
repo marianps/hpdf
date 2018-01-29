@@ -705,7 +705,7 @@ def fchge(vpthnm):
             vpthid=getfldrid[0]['path_id']
             fldrresp=r_folderlist(vauth,vhid,vpthid)
             flresp=r_filelist(vauth,vhid,vpthid)
-            respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content + flinsresp.content, fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
+            respo = make_response(render_template('homedrive.html', name=vuser, msg=getfldrid, fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
 
             return respo
     else:
