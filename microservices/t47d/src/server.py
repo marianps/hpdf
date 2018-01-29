@@ -392,9 +392,9 @@ def json_message():
 def index():
     return render_template('dlogin.html')
 
-@app.route("/cfldr")
-def cfldr():
-    return render_template('cfldr.html')
+@app.route("/cfldr/pthid")
+def cfldr(pthid):
+    return render_template('cfldr.html',pthid = pthid)
 
 @app.route("/regdisplay", methods = ['POST', 'GET'])
 def registerpage():
@@ -570,16 +570,16 @@ def dregister():
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
 
-                    return respo
+                    return respo.content
                 #Failure of insert into App_user
                 else:
-                    return cusrrep
+                    return cusrrep.content
             #Failure of query for new user root folder
             else:
-                return rtfldr
+                return rtfldr.content
         #Failure of insert for new user root folder
         else:
-            return cpthrep
+            return cpthrep.content
     #Failure of new user creation at Auth API Call
     else:
         return resp.content
@@ -600,9 +600,10 @@ def fldrcreate():
     if request.method == 'POST':
         if request.content_type == 'application/json':
             vfldrname = content['hvfldrname']
+            vpthid = content['hvfldrid']
         else:
             vfldrname = request.form['hvfldrname']
-
+            vpthid = request.form['hvfldrid']
         #Creating user root folder for newly created user
         cpthrep=c_userfldr(vauth,vhid,vpthid,vfldrname)
         if (cpthrep.status_code >= 200 and cpthrep.status_code < 300):
@@ -616,7 +617,7 @@ def fldrcreate():
             return respo
         #Failure of insert for new user root folder
         else:
-            return cpthrep
+            return cpthrep.content
     else:
         return "invalid request"
 
