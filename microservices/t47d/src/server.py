@@ -108,12 +108,12 @@ def r_getfldrid(vauth,vhid,vpthnm):
                 "$and": [
                     {
                         "user_id": {
-                            "$eq": + vhid
+                            "$eq": vhid
                         }
                     },
                     {
                         "path_nm": {
-                            "$eq": + vpthnm
+                            "$eq": vpthnm
                         }
                     }
                 ]
