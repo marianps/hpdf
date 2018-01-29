@@ -598,14 +598,15 @@ def fileupload():
 
         if request.content_type == 'application/json':
             content = request.json
-            fileup = content['hvfldrname']
+            fileup = content['hvfname']
         else:
-            fileup = request.form['hvfldrname']
+            fileup = request.form['hvfname']
 
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
-
+        print("before upload call")
         resp = requests.post(url, data=fileup, headers=headers)
+        print("after upload call")
 
     # resp.content contains the json response.
         print("filestore call",resp.content)
@@ -632,6 +633,7 @@ def fileupload():
 
             return respo
         else:
+            print("after upload call")
             return resp.content
     else:
         return "failed call"
