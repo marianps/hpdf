@@ -477,7 +477,7 @@ def dlogin():
                 print(fldrresp.json())
                 print(flresp.json())
                 #respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, fldr=fldrresp.json(), fllst=flresp.json()))
-                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app, fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
+                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app, fldr=fldrresp.json(), fllst=flresp.json(),pthid=str(usrdt[0]['root_path_id'])))
                 respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                 respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                 respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
@@ -565,7 +565,7 @@ def dregister():
                         respo.set_cookie('rtpthid', str(fldrid))
                     else:
                         #respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content + cpthrep.content +rtfldr.content+cusrrep.content, fldr="",fllst=""))
-                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app , fldr="", fllst="",pthid=vpthid))
+                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app , fldr="", fllst="",pthid=str(fldrid)))
                         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
