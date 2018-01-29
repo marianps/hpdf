@@ -392,7 +392,7 @@ def json_message():
 def index():
     return render_template('dlogin.html')
 
-@app.route("/cfldr/pthid")
+@app.route("/cfldr/<pthid>")
 def cfldr(pthid):
     return render_template('cfldr.html',pthid = pthid)
 
