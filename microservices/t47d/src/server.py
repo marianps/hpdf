@@ -647,7 +647,7 @@ def fileupload():
             fileup = content['hvfname']
         else:
             fileup = request.files['hvfname']
-            vpthid = request.form['fldrid']
+            vpthid = request.form['hvfldrid']
 
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
@@ -728,9 +728,9 @@ def filelist():
 
     content = request.json
     if request.content_type == 'application/json':
-        vpthid = content['hvfldr']
+        vpthid = content['hvfldrid']
     else:
-        vpthid = request.form['hvfldr']
+        vpthid = request.form['hvfldrid']
 
     if request.content_type == 'application/json':
         respo=r_filelist(vauth,vhid,vpthid)
@@ -755,9 +755,9 @@ def fldrlist():
 
     content = request.json
     if request.content_type == 'application/json':
-        vpthid = content['hvfldr']
+        vpthid = content['hvfldrid']
     else:
-        vpthid = request.form['hvfldr']
+        vpthid = request.form['hvfldrid']
 
     if request.content_type == 'application/json':
         respo=r_fldrlist(vauth,vhid,vpthid)
