@@ -734,13 +734,13 @@ def filelist():
 
     if request.content_type == 'application/json':
         respo=r_filelist(vauth,vhid,vpthid)
-        print(respo.json())
-
+        print(respo.content)
+        return respo
     else:
        fldrresp==r_folderlist(vauth,vhid,vpthid)
        flresp=r_filelist(vauth,vhid,vpthid)
        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.json(), fldr=fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
-    return respo.json()
+       return respo
 
 @app.route("/fldrlist", methods = ['POST','GET'])
 def fldrlist():
@@ -763,13 +763,13 @@ def fldrlist():
 
     if request.content_type == 'application/json':
         respo=r_folderlist(vauth,vhid,vpthid)
-        print(respo.json())
+        print(respo.content)
+        return respo
     else:
         fldrresp==r_folderlist(vauth,vhid,vpthid)
         flresp=r_filelist(vauth,vhid,vpthid)
-
         respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
-    return respo.json()
+        return respo
 
 @app.route("/dlogout")
 def dlogout():
