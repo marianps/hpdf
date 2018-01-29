@@ -764,7 +764,7 @@ def fldrlist():
     if request.content_type == 'application/json':
         respo=r_folderlist(vauth,vhid,vpthid)
         print(respo.content)
-        return respo
+        return respo.content
     else:
         fldrresp==r_folderlist(vauth,vhid,vpthid)
         flresp=r_filelist(vauth,vhid,vpthid)
