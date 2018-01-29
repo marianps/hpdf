@@ -89,6 +89,52 @@ def r_folderlist(vauth,vhid,vpthid):
     print(resp.content)
     return resp
 
+def r_getfldrid(vauth,vhid,vpthnm):
+    # This is the url to which the query is made
+    url = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
+
+    # This is the json payload for the query
+    requestPayload = {
+        "type": "select",
+        "args": {
+            "table": "user_paths",
+            "columns": [
+                "path_nm",
+                "path_id",
+                "prnt_path_id",
+                "created_at"
+            ],
+            "where": {
+                "$and": [
+                    {
+                        "user_id": {
+                            "$eq": + vhid
+                        }
+                    },
+                    {
+                        "path_nm": {
+                            "$eq": + vpthnm
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+    # Setting headers
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + vauth
+    }
+
+    # Make the query and store response in resp
+    resp = requests.request("POST", url, data=json.dumps(requestPayload), headers=headers)
+
+    # resp.content contains the json response.
+    print(resp.content)
+    return resp
+
+
 def r_filelist(vauth,vhid,vpthid):
     # This is the url to which the query is made
     url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
@@ -631,6 +677,37 @@ def fileupload():
         else:
             print("after upload call")
             return resp.content
+    else:
+        return "failed call"
+
+
+@app.route("/fchge/<vpthnm>", methods = ['POST'])
+def fchge(vpthnm):
+
+    print(request)
+    print(request.headers)
+    print(request.form)
+    print(request.json)
+    print(request.cookies)
+    vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get(vauth)
+    vpthid = request.cookies.get('rtpthid')
+    vhid = request.headers.get('X-Hasura-User-Id')
+
+    respfldr=r_getfldrid(vauth,vhid,vpthnm)
+    # resp.content contains the json response.
+    if(respfldr.status_code >= 200 and respfldr.status_code < 300):
+            getfldrid = respfldr.json()
+            print(getfldrid['path_nm'])
+            print(getfldrid['path_id'])
+            print(getfldrid['prnt_path_id'])
+            print(getfldrid['created_at'])
+            vpthid=getfldrid['path_id']
+            fldrresp=r_folderlist(vauth,vhid,vpthid)
+            flresp=r_filelist(vauth,vhid,vpthid)
+            respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content + flinsresp.content, fldr=fldrresp.json(), fllst=flresp.json()))
+
+            return respo
     else:
         return "failed call"
 

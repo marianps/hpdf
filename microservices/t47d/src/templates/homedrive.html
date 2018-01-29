@@ -15,7 +15,8 @@
         <p><a href="/cfldr" target="_self">Create Folder</a></p>
         <p>Folder List:{{ fldr }}!</p>
         <p>{% for row in fldr %}</p>
-        <div> {{ row['path_nm'] }} - {{ row['file_path_id'] | string }} - {{ row['created_at']}}</div>
+        {% set flink = '/fchge/' + row['path_nm'] %}
+        <div><a href="{{ flink }}"> {{ row['path_nm'] }}</a> - {{ row['file_path_id'] | string }} - {{ row['created_at']}}</div>
         {% endfor %}
         <p><select name="hvfldr">
         {% for item in fldr %}
