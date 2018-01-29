@@ -620,7 +620,7 @@ def fldrcreate():
     else:
         return "invalid request"
 
-@app.route("/fupload", methods = ['POST'])
+@app.route("/fupload", methods = ['POST','GET'])
 def fileupload():
     # This is the url to which the query is made
     url = "https://filestore." + CLUSTER_NAME + ".hasura-app.io/v1/file"
@@ -647,6 +647,7 @@ def fileupload():
             fileup = content['hvfname']
         else:
             fileup = request.files['hvfname']
+            vpthid = request.form['fldrid']
 
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
@@ -829,7 +830,7 @@ def dlwnload(vfileid):
     filename = "downloadedFile.png"
 
     # Make the query
-    resp = requests.get(url, stream=TRUE)
+    resp = requests.get(url, stream=True)
 
     #with open(filename, 'wb') as filehd:
     #    shutil.copyfileobj(resp.raw, filehd)
