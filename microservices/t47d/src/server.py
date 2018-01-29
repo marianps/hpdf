@@ -735,7 +735,7 @@ def filelist():
     if request.content_type == 'application/json':
         respo=r_filelist(vauth,vhid,vpthid)
     else:
-       fldrresp==r_fldrlist(vauth,vhid,vpthid)
+       fldrresp==r_folderlist(vauth,vhid,vpthid)
        flresp=r_filelist(vauth,vhid,vpthid)
        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
     return respo
@@ -760,9 +760,9 @@ def fldrlist():
         vpthid = request.form['hvfldrid']
 
     if request.content_type == 'application/json':
-        respo=r_fldrlist(vauth,vhid,vpthid)
+        respo=r_folderlist(vauth,vhid,vpthid)
     else:
-        fldrresp==r_fldrlist(vauth,vhid,vpthid)
+        fldrresp==r_folderlist(vauth,vhid,vpthid)
         flresp=r_filelist(vauth,vhid,vpthid)
 
         respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
