@@ -600,7 +600,7 @@ def fileupload():
             content = request.json
             fileup = content['hvfname']
         else:
-            fileup = request.form['hvfname']
+            fileup = request.files['hvfname']
 
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
