@@ -604,13 +604,9 @@ def fileupload():
 
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
-        print("before upload call")
         resp = requests.post(url, data=fileup, headers=headers)
-        print("after upload call")
 
     # resp.content contains the json response.
-        print("filestore call",resp.content)
-
         if(resp.status_code >= 200 and resp.status_code < 300):
             vfileupload = resp.json()
             print(vfileupload['file_id'])

@@ -19,7 +19,7 @@
         {% endfor %}
         <p><select name="hvfldr">
         {% for item in fldr %}
-                <option  value="{{item['file_path_id']}}">{{item['path_nm']}}</option>
+                <option  value="{{item['file_path_id'] | string }}">{{item['path_nm']}}</option>
         {% endfor %}
         </select></p>
         <p>File List:{{ fllst }}!</p>
