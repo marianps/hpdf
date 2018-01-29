@@ -698,11 +698,11 @@ def fchge(vpthnm):
     # resp.content contains the json response.
     if(respfldr.status_code >= 200 and respfldr.status_code < 300):
             getfldrid = respfldr.json()
-            print(getfldrid['path_nm'])
-            print(getfldrid['path_id'])
-            print(getfldrid['prnt_path_id'])
-            print(getfldrid['created_at'])
-            vpthid=getfldrid['path_id']
+            print(getfldrid[0]['path_nm'])
+            print(getfldrid[0]['path_id'])
+            print(getfldrid[0]['prnt_path_id'])
+            print(getfldrid[0]['created_at'])
+            vpthid=getfldrid[0]['path_id']
             fldrresp=r_folderlist(vauth,vhid,vpthid)
             flresp=r_filelist(vauth,vhid,vpthid)
             respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content + flinsresp.content, fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
