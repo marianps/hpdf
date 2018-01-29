@@ -727,7 +727,7 @@ def dlogout():
         respo = make_response(render_template('dlogin.html'))
     return respo
 
-@app.route("/dlwnload/<vfileid>")
+@app.route("/dlwnload/<vfileid>" , methods = ['GET'])
 def dlwnload(vfileid):
 
     print(request)
@@ -741,7 +741,7 @@ def dlwnload(vfileid):
     vhid = request.headers.get('X-Hasura-User-Id')
 
     # This is the url to which the query is made
-    url = "https://filestore.anthology78.hasura-app.io/v1/file/"+vfileid
+    url = "https://filestore." + CLUSTER_NAME + ".hasura-app.io/v1/file/"+vfileid
 
     # This is the json payload for the query
     # Setting headers
@@ -754,9 +754,9 @@ def dlwnload(vfileid):
     # Make the query
     resp = requests.get(url, stream=TRUE)
 
-    with open(filename, 'wb') as filehd:
-        shutil.copyfileobj(resp.raw, filehd)
-    return filehd
+    #with open(filename, 'wb') as filehd:
+    #    shutil.copyfileobj(resp.raw, filehd)
+    return resp.raw
 
 @app.after_request
 def apply_caching(response):
