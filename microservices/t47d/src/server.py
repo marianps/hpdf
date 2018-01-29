@@ -727,7 +727,7 @@ def dlogout():
         respo = make_response(render_template('dlogin.html'))
     return respo
 
-@app.route("/dlwnload/<vfileid>" , methods = ['GET'])
+@app.route("/dwnload/<vfileid>" , methods = ['GET'])
 def dlwnload(vfileid):
 
     print(request)
