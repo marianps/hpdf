@@ -28,7 +28,7 @@
         {% set flink = '/dwnload/' + vfllst['file_id'] %}
         <div><a href="{{ flink }}">{{ vfllst['file_name'] }}</a>-{{ vfllst['file_id'] }}-{{ vfllst['file_path_id'] | string }}- {{ vfllst['created_at'] }}</div>
         {% endfor %}
-        <p><input type="hidden" name="fldrid"></p>
+        <p><input type="hidden" name="fldrid" value="{{ pthid }}"></p>
         <p><h3><a href="/dlogout"/> Logout</h3></p>
         </form>
 	<br>
