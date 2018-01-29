@@ -676,10 +676,11 @@ def fileupload():
 
             return respo
         else:
-            print("after upload call")
             return resp.content
     else:
-        return "failed call"
+        fldrresp=r_folderlist(vauth,vhid,vpthid)
+        flresp=r_filelist(vauth,vhid,vpthid)
+        respo = make_response(render_template('homedrive.html', name=vuser, msg="", fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
 
 
 @app.route("/fchge/<vpthnm>", methods = ['GET'])
@@ -832,9 +833,10 @@ def dlwnload(vfileid):
     # Make the query
     resp = requests.get(url, stream=True)
 
-    #with open(filename, 'wb') as filehd:
-    #    shutil.copyfileobj(resp.raw, filehd)
-    return resp.raw
+    with open(filename, 'wb') as fd:
+        for chunk in resp.iter_content(chunk_size=128):
+            fd.write(chunk)
+    return fd
 
 @app.after_request
 def apply_caching(response):
