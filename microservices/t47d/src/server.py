@@ -649,8 +649,10 @@ def fileupload():
             fileup = content['hvfname']
         else:
             fileup = request.files['hvfname']
+            print("file" , fileup)
             vpthid = request.form['hvfldrid']
-        print("file" , fileup)
+
+            print("vpthid" , vpthid)
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
         print("call before")
