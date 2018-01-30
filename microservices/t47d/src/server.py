@@ -645,6 +645,7 @@ def fileupload():
 
         if request.content_type == 'application/json':
             content = request.json
+            print(content)
             fileup = content['hvfname']
         else:
             fileup = request.files['hvfname']
