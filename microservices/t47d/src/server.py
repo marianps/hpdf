@@ -484,9 +484,9 @@ def dlogin():
 
             return respo
         else:
-            return usrirep
+            return usrirep.content
     else:
-        return resp
+        return resp.content
 
 @app.route("/dregister", methods = ['POST'])
 def dregister():
@@ -712,7 +712,7 @@ def fchge(vpthnm):
 
             return respo
     else:
-        return "failed call"
+        return respfldr.content
 
 @app.route("/filelist", methods = ['POST','GET'])
 def filelist():
@@ -841,11 +841,6 @@ def dlwnload(vfileid):
         for chunk in resp.iter_content(chunk_size=128):
             fd.write(chunk)
     return fd
-
-@app.after_request
-def apply_caching(response):
-    response.headers["X-Frame-Options"] = "SAMEORIGIN"
-    return response
 
 # Handling all other request and robots.txt request
 @app.errorhandler(404)
