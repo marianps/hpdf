@@ -650,7 +650,7 @@ def fileupload():
         else:
             fileup = request.files['hvfname']
             print("file" , fileup)
-            vpthid = request.form['hvfldrid']
+            #vpthid = request.form['hvfldrid']
 
             print("vpthid" , vpthid)
         if fileup and allowed_file(fileup.filename):
