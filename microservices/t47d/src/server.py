@@ -650,10 +650,12 @@ def fileupload():
         else:
             fileup = request.files['hvfname']
             vpthid = request.form['hvfldrid']
-
+        print("file" , fileup)
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
+        print("call before")
         resp = requests.post(url, data=fileup, headers=headers)
+        print("call after")
 
     # resp.content contains the json response.
         if(resp.status_code >= 200 and resp.status_code < 300):
@@ -678,6 +680,8 @@ def fileupload():
 
             return respo
         else:
+            print("failed call" , resp.content)
+
             return resp.content
     else:
         fldrresp=r_folderlist(vauth,vhid,vpthid)
