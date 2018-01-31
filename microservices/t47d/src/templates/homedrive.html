@@ -15,7 +15,7 @@
         <p>Folder List:{{ fldr }}!</p>
         <p>{% for row in fldr %}</p>
         {% set flink = '/fchge/' + row['path_nm'] %}
-        <div><a href="{{ flink }}"> {{ row['path_nm'] }}</a> - {{ row['file_path_id'] | string }} - {{ row['created_at']}}</div>
+        <div><a href="{{ flink }}"> {{ row['path_nm'] }}</a> - {{ row['file_path_id'] | number }} - {{ row['created_at']}}</div>
         {% endfor %}
         <p>{% for vfllst in fllst %}</p>
         {% set flink = '/dwnload/' + vfllst['file_id'] %}
