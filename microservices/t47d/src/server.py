@@ -571,7 +571,7 @@ def dregister():
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
 
-                    return respo.content
+                    return respo
                 #Failure of insert into App_user
                 else:
                     return cusrrep.content
