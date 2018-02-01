@@ -631,6 +631,8 @@ def fileupload():
     print(request.form)
     print(request.json)
     print(request.cookies)
+    print(os.environ)
+    print(app.config)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
     vpthid = request.cookies.get('rtpthid')
