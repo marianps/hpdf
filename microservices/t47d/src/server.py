@@ -637,7 +637,7 @@ def fileupload():
     vpthid = request.cookies.get('rtpthid')
     vhid = request.headers.get('X-Hasura-User-Id')
     orgn =  request.headers.get('Origin')
-    hst =  "http://"+request.headers.get('Host')
+    hst =  "https://"+request.headers.get('Host')
     print(orgn)
     print(hst)
     # Setting headers
@@ -647,15 +647,9 @@ def fileupload():
     # Open the file
     if request.method =='POST':
 
-        if request.content_type == 'application/json':
-            content = request.json
-            print(content)
-            fileup = content['hvfname']
-            fileup = content['hvfldrid']
-        else:
-            fileup = request.files['hvfname']
-            print("file" , fileup)
-            vpthid = request.form['hvfldrid']
+        fileup = request.files['hvfname']
+        print("file" , fileup)
+        vpthid = request.form['hvfldrid']
 
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
@@ -675,7 +669,7 @@ def fileupload():
 
             flinsresp=c_fileupload(vauth,vhid,vpthid,filename,vfileid)
 
-            if request.content_type == 'application/json':
+            if orgn != hst :
                 respo = make_response(resp.content)
             else:
                 fldrresp=r_folderlist(vauth,vhid,vpthid)
