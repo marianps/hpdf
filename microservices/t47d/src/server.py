@@ -37,6 +37,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SESSION_COOKIE_HTTPONLY'] = False
 DEF_USR_PATH = '/'
 DEF_PRNT_PTHID = 0
+DEF_APP_NM = ""
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -631,13 +632,14 @@ def fileupload():
     print(request.form)
     print(request.json)
     print(request.cookies)
-    print(os.environ)
-    print(app.config)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
     vpthid = request.cookies.get('rtpthid')
     vhid = request.headers.get('X-Hasura-User-Id')
-
+    orgn =  request.headers.get('Origin')
+    hst =  "http://"+request.headers.get('Host')
+    print(orgn)
+    print(hst)
     # Setting headers
     headers = {
         "Authorization": "Bearer " + vauth
