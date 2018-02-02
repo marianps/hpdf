@@ -673,6 +673,7 @@ def fileupload():
 
             if orgn != hst :
                 respo = make_response(resp.content)
+                respo.mimetype = 'application/json'
             else:
                 fldrresp=r_folderlist(vauth,vhid,vpthid)
                 flresp=r_filelist(vauth,vhid,vpthid)
