@@ -633,7 +633,7 @@ def fileupload():
     print(request.form)
     print(request.json)
     print(request.cookies)
-    print(request.data)
+
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
     vpthid = request.cookies.get('rtpthid')
@@ -708,6 +708,45 @@ def fileupload():
         flresp=r_filelist(vauth,vhid,vpthid)
         resp = make_response(render_template('homedrive.html', name=vuser, msg="", fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
         return resp
+
+
+@app.route("/fupload2", methods = ['POST','GET'])
+def fileupload2():
+
+    print(request)
+    print(request.headers)
+    print(request.form)
+    print(request.json)
+    print(request.cookies)
+    vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get(vauth)
+    vpthid = request.cookies.get('rtpthid')
+    vhid = request.headers.get('X-Hasura-User-Id')
+    orgn =  request.headers.get('Origin')
+    hst =  "https://"+request.headers.get('Host')
+    print(orgn)
+    print(hst)
+    # Setting headers
+    headers = {
+        "Authorization": "Bearer " + vauth
+    }
+
+    # Open the file
+    if request.method =='POST':
+        if request.content_type == 'application/json':
+            content = request.json
+            vfileid = content['hvfileid']
+            vfilename = content['hvfname']
+            vpthid = content['hvfldrid']
+            vpthid = content['hvfilesize']
+
+            flinsresp=c_fileupload(vauth,vhid,vpthid,vfilename,vfileid,vfilesize)
+            respo = make_response(flinsresp.content)
+            return respo
+        else:
+            return "Invalid Content Type"
+    return "Invalid Method Call"
+
 
 @app.route("/fchge/<vpthnm>", methods = ['GET'])
 def fchge(vpthnm):
