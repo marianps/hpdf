@@ -611,7 +611,7 @@ def fldrcreate():
         if (cpthrep.status_code >= 200 and cpthrep.status_code < 300):
             # querying for User root folder id for newly created user
             if request.content_type == 'application/json':
-                respo = make_response(resp.content)
+                respo = make_response(cpthrep.content)
             else:
                 fldrresp=r_folderlist(vauth,vhid,vpthid)
                 flresp=r_filelist(vauth,vhid,vpthid)
@@ -645,12 +645,19 @@ def fileupload():
     headers = {
         "Authorization": "Bearer " + vauth
     }
+
     # Open the file
     if request.method =='POST':
+        if request.content_type == 'application/json':
+            content = request.json
+            fileup = content['hvfname']
+            print("file" , fileup)
+            vpthid = content['hvfldrid']
 
-        fileup = request.files['hvfname']
-        print("file" , fileup)
-        vpthid = request.form['hvfldrid']
+        else:
+            fileup = request.files['hvfname']
+            print("file" , fileup)
+            vpthid = request.form['hvfldrid']
 
         if fileup and allowed_file(fileup.filename):
             filename = secure_filename(fileup.filename)
