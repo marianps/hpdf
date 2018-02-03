@@ -864,8 +864,9 @@ def dlogout():
 
     # resp.content contains the json response.
     print(resp.content)
+
     if request.content_type == 'application/json':
-        respo=make_response(resp.json())
+        respo=make_response(resp.content)
         respo.set_cookie(CLUSTER_NAME, expires=0)
         respo.set_cookie(vauth, expires=0)
         respo.set_cookie('rtpthid', expires=0)
