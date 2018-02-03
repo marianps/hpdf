@@ -872,6 +872,10 @@ def dlogout():
 
     else:
         respo = make_response(render_template('dlogin.html'))
+        respo.set_cookie(CLUSTER_NAME, expires=0)
+        respo.set_cookie(vauth, expires=0)
+        respo.set_cookie('rtpthid', expires=0)
+
     return respo
 
 @app.route("/dwnload/<vfileid>" , methods = ['GET'])
