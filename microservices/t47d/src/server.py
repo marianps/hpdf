@@ -679,9 +679,20 @@ def fileupload():
 
             flinsresp=c_fileupload(vauth,vhid,vpthid,filename,vfileid,vfilesize)
 
+            data_app = {}
+            data_app["file_id"] = vfileupload['file_id']
+            data_app["user_id"] = vfileupload['user_id']
+            data_app["user_role"] = vfileupload['user_role']
+            data_app["content_type"] = vfileupload['content_type']
+            data_app["file_status"] = vfileupload['file_status']
+            data_app["created_at"] = vfileupload['created_at']
+            data_app["file_size"] = vfileupload['file_size']
+
+            json_app = json.dumps(data_app)
+            print ('JSON: ', json_app)
+
             if orgn != hst :
-                respo = make_response(resp.content)
-                respo.mimetype = 'application/json'
+                respo = make_response(json_app)
             else:
                 fldrresp=r_folderlist(vauth,vhid,vpthid)
                 flresp=r_filelist(vauth,vhid,vpthid)
