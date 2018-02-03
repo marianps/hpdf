@@ -836,7 +836,7 @@ def fldrlist():
         respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
         return respo
 
-@app.route("/dlogout")
+@app.route("/dlogout", methods = ['POST', 'GET'])
 def dlogout():
 
     print(request)
