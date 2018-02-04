@@ -18,7 +18,7 @@ from werkzeug import secure_filename
 # Licence:     <your licence>
 # Modified:    19-01-2018 - Include the Auth integration index(),registerpage(),
 #                           dregister(),login(),page_not_found(error)
-# Modified:    20-01-2018
+# Modified:    20-01-2018 - 
 
 
 #-------------------------------------------------------------------------------
@@ -738,7 +738,7 @@ def fileupload2():
             vfileid = content['hvfileid']
             vfilename = content['hvfname']
             vpthid = content['hvfldrid']
-            vpthid = content['hvfilesize']
+            vfilesize = content['hvfilesize']
 
             flinsresp=c_fileupload(vauth,vhid,vpthid,vfilename,vfileid,vfilesize)
             respo = make_response(flinsresp.content)
