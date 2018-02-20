@@ -210,7 +210,7 @@ def r_qaccss(vauth,vhid,vpthid):
             ],
             "where": {
                 "user_id": {
-                    "$eq": +vhid
+                    "$eq": vhid
                 }
             }
         }
