@@ -851,6 +851,44 @@ def fileupload2():
             return "Invalid Content Type"
     return "Invalid Method Call"
 
+    @app.route("/usract", methods = ['POST','GET'])
+def usract():
+
+    print(request)
+    print(request.headers)
+    print(request.form)
+    print(request.json)
+    print(request.cookies)
+    vauth = request.cookies.get(CLUSTER_NAME)
+    vuser = request.cookies.get(vauth)
+    vpthid = request.cookies.get('rtpthid')
+    vhid = request.headers.get('X-Hasura-User-Id')
+
+
+    # Open the file
+    if request.method =='POST':
+        if request.content_type == 'application/json':
+            content = request.json
+            vfileid = content['hvfileid']
+            vfilename = content['hvfname']
+            vpthid = content['hvfldrid']
+            vfilesize = content['hvfilesize']
+            vobjid = vfileid
+            vobjtyp = content['hvobjtype']
+            vobjnm = content['hvobjname']
+            vactnm = content['hvactname']
+            vactdesc = content['hvactdesc']
+
+            # Logging Activity
+            actresp=c_usractvty(vauth,vhid,vuser,vobjid,vobjnm,vfilename,vactnm,vactdesc)
+
+            respo = make_response(actresp.content)
+            return respo
+        else:
+            return "Invalid Content Type"
+    return "Invalid Method Call"
+
+
 
 @app.route("/fchge/<vpthnm>", methods = ['GET'])
 def fchge(vpthnm):
