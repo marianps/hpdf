@@ -12,7 +12,7 @@
         <p>Message:{{ msg }}!</p>
         <p><h3>Quick Access:</h3>{{ qa }}!</p>
         <p>{% for row in qa %}</p>
-        <div><a href=""> {{ row['username'] }}</a> - {{ row['obj_id'] | string }} - {{ row['obj_nm']}} - {{ row['obj_type'] | string }} - {{ row['act_nm'] - row['act_desc'] }}</div>
+        <div><a href=""> {{ row['username'] }}</a> - {{ row['obj_id'] }} - {{ row['obj_nm']}} - {{ row['obj_type'] }} - {{ row['act_nm'] - row['act_desc'] }}</div>
         {% endfor %}
         
         <p><h2>Upload file: </h2><input type="file" name="hvfname"><input type="submit" value="Upload File" name="submit"></p>
