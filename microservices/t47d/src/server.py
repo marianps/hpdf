@@ -210,7 +210,7 @@ def r_qaccss(vauth,vhid,vpthid):
             ],
             "where": {
                 "user_id": {
-                    "$eq": "9"
+                    "$eq": +vhid
                 }
             }
         }
@@ -558,12 +558,14 @@ def dlogin():
                 respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
 
             else:
+                
                 fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
                 flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
+                qaccresp=r_qaccss(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
                 print(fldrresp.json())
                 print(flresp.json())
                 #respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, fldr=fldrresp.json(), fllst=flresp.json()))
-                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app, fldr=fldrresp.json(), fllst=flresp.json(),pthid=str(usrdt[0]['root_path_id'])))
+                respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app, qa=qaccresp.json(), fldr=fldrresp.json(), fllst=flresp.json(),pthid=str(usrdt[0]['root_path_id'])))
                 respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                 respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                 respo.set_cookie('rtpthid', str(usrdt[0]['root_path_id']))
@@ -651,7 +653,7 @@ def dregister():
                         respo.set_cookie('rtpthid', str(fldrid))
                     else:
                         #respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content + cpthrep.content +rtfldr.content+cusrrep.content, fldr="",fllst=""))
-                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app , fldr="", fllst="",pthid=str(fldrid)))
+                        respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app , qa="", fldr="", fllst="",pthid=str(fldrid)))
                         respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
                         respo.set_cookie(vauthdata['auth_token'], vauthdata['username'])
                         respo.set_cookie('rtpthid', str(fldrid))
@@ -703,9 +705,10 @@ def fldrcreate():
             if request.content_type == 'application/json':
                 respo = make_response(cpthrep.content)
             else:
+                qaccresp=r_qaccss(vauth,vhid,vpthid)
                 fldrresp=r_folderlist(vauth,vhid,vpthid)
                 flresp=r_filelist(vauth,vhid,vpthid)
-                respo = make_response(render_template('homedrive.html', name=vuser, msg=cpthrep.content, fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
+                respo = make_response(render_template('homedrive.html', name=vuser, msg=cpthrep.content,qa=qaccresp.json() , fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
             return respo
         #Failure of insert for new user root folder
         else:
@@ -791,7 +794,8 @@ def fileupload():
             else:
                 fldrresp=r_folderlist(vauth,vhid,vpthid)
                 flresp=r_filelist(vauth,vhid,vpthid)
-                respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content + flinsresp.content, fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
+                qaccresp=r_qaccss(vauth,vhid,vpthid)
+                respo = make_response(render_template('homedrive.html', name=vuser, msg=resp.content + flinsresp.content, qa=qaccresp.json() , fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
 
             return respo
         else:
@@ -801,7 +805,8 @@ def fileupload():
     else:
         fldrresp=r_folderlist(vauth,vhid,vpthid)
         flresp=r_filelist(vauth,vhid,vpthid)
-        resp = make_response(render_template('homedrive.html', name=vuser, msg="", fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
+        qaccresp=r_qaccss(vauth,vhid,vpthid)
+        resp = make_response(render_template('homedrive.html', name=vuser, msg="", qa=qaccresp.json(), fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
         return resp
 
 
@@ -871,7 +876,8 @@ def fchge(vpthnm):
             vpthid=getfldrid[0]['path_id']
             fldrresp=r_folderlist(vauth,vhid,vpthid)
             flresp=r_filelist(vauth,vhid,vpthid)
-            respo = make_response(render_template('homedrive.html', name=vuser, msg=getfldrid, fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
+            qaccresp=r_qaccss(vauth,vhid,vpthid)
+            respo = make_response(render_template('homedrive.html', name=vuser, msg=getfldrid, qa=qaccresp.json(), fldr=fldrresp.json(), fllst=flresp.json(),pthid=vpthid))
 
             return respo
     else:
@@ -903,7 +909,8 @@ def filelist():
     else:
        fldrresp=r_folderlist(vauth,vhid,vpthid)
        flresp=r_filelist(vauth,vhid,vpthid)
-       respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.json(), fldr=fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
+       qaccresp=r_qaccss(vauth,vhid,vpthid)
+       respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.json(), qa=qaccresp.json(), fldr=fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
        return respo
 
 @app.route("/qaccess", methods = ['POST','GET'])
@@ -933,7 +940,7 @@ def qaccess():
        qaccresp=r_qaccss(vauth,vhid,vpthid) 
        fldrresp=r_folderlist(vauth,vhid,vpthid)
        flresp=r_filelist(vauth,vhid,vpthid)
-       respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.json(),fldr=qaccresp.json() + fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
+       respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.json(), qa=qaccresp.json() ,fldr= fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
        return respo
    
 @app.route("/actvty", methods = ['POST','GET'])
@@ -963,7 +970,7 @@ def actvty():
        qaccresp=r_qaccss(vauth,vhid,vpthid) 
        fldrresp=r_folderlist(vauth,vhid,vpthid)
        flresp=r_filelist(vauth,vhid,vpthid)
-       respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.json(),fldr=qaccresp.json() + fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
+       respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.json(),qa=qaccresp.json() ,fldr=fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
        return respo
 
 @app.route("/fldrlist", methods = ['POST','GET'])
@@ -992,7 +999,8 @@ def fldrlist():
     else:
         fldrresp==r_folderlist(vauth,vhid,vpthid)
         flresp=r_filelist(vauth,vhid,vpthid)
-        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, fldr=fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
+        qaccresp=r_qaccss(vauth,vhid,vpthid)
+        respo = make_response(render_template('homedrive.html',name=vuser, msg= flresp.content, qa=qaccresp.json(), fldr=fldrresp.json(),fllst=flresp.json(),pthid=vpthid))
         return respo
 
 @app.route("/dlogout", methods = ['POST', 'GET'])
