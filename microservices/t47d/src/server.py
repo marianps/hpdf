@@ -206,11 +206,13 @@ def r_qaccss(vauth,vhid,vpthid):
                 "obj_nm",
                 "obj_type",
                 "act_nm",
-                "act_desc"
+                "act_desc",
+                "modified_at"
             ],
+            "limit": "4",
             "where": {
                 "user_id": {
-                    "$eq": vhid
+                    "$eq": "9"
                 }
             }
         }
@@ -880,7 +882,7 @@ def usract():
             vactdesc = content['hvactdesc']
 
             # Logging Activity
-            actresp=c_usractvty(vauth,vhid,vuser,vobjid,vobjnm,vfilename,vactnm,vactdesc)
+            actresp=c_usractvty(vauth,vhid,vuser,vobjid,vobjtyp,vfilename,vactnm,vactdesc)
 
             respo = make_response(actresp.content)
             return respo
