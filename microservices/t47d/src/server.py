@@ -212,7 +212,7 @@ def r_qaccss(vauth,vhid,vpthid):
             "limit": "4",
             "where": {
                 "user_id": {
-                    "$eq": "9"
+                    "$eq": vhid
                 }
             }
         }
