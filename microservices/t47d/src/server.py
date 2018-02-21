@@ -851,7 +851,7 @@ def fileupload2():
             return "Invalid Content Type"
     return "Invalid Method Call"
 
-    @app.route("/usract", methods = ['POST','GET'])
+@app.route("/usract", methods = ['POST','GET'])
 def usract():
 
     print(request)
