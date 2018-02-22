@@ -701,7 +701,7 @@ def fldrcreate():
         if (cpthrep.status_code >= 200 and cpthrep.status_code < 300):
             # Logging Activity
             vobjid=1
-            actresp=c_usractvty(vauth,vhid,vuser,vobjid,"Folder",vfldrname,"Create","You created a folder")
+            actresp=c_usractvty(vauth,vhid,vuser,str(vobjid),"Folder",vfldrname,"Create","You created a folder")
 
             # querying for User root folder id for newly created user
             if request.content_type == 'application/json':
