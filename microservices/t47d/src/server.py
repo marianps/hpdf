@@ -232,6 +232,56 @@ def r_qaccss(vauth,vhid,vpthid):
 
     return resp1
 
+def r_actvty(vauth,vhid,vpthid):
+    # This is the url to which the query is made
+    url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
+
+    # This is the json payload for the query
+    requestPayload1 = {
+    "type": "select",
+    "args": {
+        "table": "user_activity",
+        "columns": [
+            "username",
+            "obj_id",
+            "obj_type",
+            "obj_nm",
+            "act_nm",
+            "act_desc",
+            "modified_at",
+            "path_id"
+        ],
+        "where": {
+            "$and": [
+                {
+                    "user_id": {
+                        "$eq": vhid
+                    }
+                },
+                {
+                    "path_id": {
+                        "$eq": vpthid
+                    }
+                }
+            ]
+        }
+    }
+}
+
+    # Setting headers
+    headers1 = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+ vauth
+    }
+
+    # Make the query and store response in resp
+    resp1 = requests.request("POST", url1, data=json.dumps(requestPayload1), headers=headers1)
+    # resp.content contains the json response.
+    print(resp1.content)
+
+    return resp1
+
+
 def r_userinfo(vauth,vhid):
     # This is the url to which the query is made
     url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
@@ -301,7 +351,7 @@ def c_userdtl(vauth,vhid,usr,rtpthid):
     print(resp1.content)
     return resp1
 
-def c_usractvty(vauth,vhid,usr,vobjid,vobjtyp,vobjnm,vactnm,vactdesc):
+def c_usractvty(vauth,vhid,usr,vobjid,vobjtyp,vobjnm,vactnm,vactdesc,pthid):
     # This is the url to which the query is made
     url1 = "https://data." + CLUSTER_NAME + ".hasura-app.io/v1/query"
 
@@ -318,7 +368,9 @@ def c_usractvty(vauth,vhid,usr,vobjid,vobjtyp,vobjnm,vactnm,vactdesc):
                     "obj_type": vobjtyp,
                     "obj_nm": vobjnm,
                     "act_nm": vactnm, 
-                    "act_desc": vactdesc
+                    "act_desc": vactdesc,
+                    "path_id": pthid
+                    
                 }
             ]
         }
@@ -701,7 +753,7 @@ def fldrcreate():
         if (cpthrep.status_code >= 200 and cpthrep.status_code < 300):
             # Logging Activity
             vobjid=1
-            actresp=c_usractvty(vauth,vhid,vuser,str(vobjid),"Folder",vfldrname,"Create","You created a folder")
+            actresp=c_usractvty(vauth,vhid,vuser,str(vobjid),"Folder",vfldrname,"Create","You created a folder",vpthid)
 
             # querying for User root folder id for newly created user
             if request.content_type == 'application/json':
@@ -775,7 +827,7 @@ def fileupload():
 
             # Logging Activity
             vobjid=vfileid
-            actresp=c_usractvty(vauth,vhid,vuser,vobjid,"File",filename,"Upload","You uploaded a File")
+            actresp=c_usractvty(vauth,vhid,vuser,vobjid,"File",filename,"Upload","You uploaded a File",vpthid)
 
             flinsresp=c_fileupload(vauth,vhid,vpthid,filename,vfileid,vfilesize)
 
@@ -844,7 +896,7 @@ def fileupload2():
 
             # Logging Activity
             vobjid=vfileid
-            actresp=c_usractvty(vauth,vhid,vuser,vobjid,"File",vfilename,"Upload","You uploaded a File")
+            actresp=c_usractvty(vauth,vhid,vuser,vobjid,"File",vfilename,"Upload","You uploaded a File",vpthid)
 
             flinsresp=c_fileupload(vauth,vhid,vpthid,vfilename,vfileid,vfilesize)
             respo = make_response(flinsresp.content)
@@ -882,7 +934,7 @@ def usract():
             vactdesc = content['hvactdesc']
 
             # Logging Activity
-            actresp=c_usractvty(vauth,vhid,vuser,vobjid,vobjtyp,vfilename,vactnm,vactdesc)
+            actresp=c_usractvty(vauth,vhid,vuser,vobjid,vobjtyp,vfilename,vactnm,vactdesc,vpthid)
 
             respo = make_response(actresp.content)
             return respo
@@ -1003,7 +1055,7 @@ def actvty():
         vpthid = request.form['hvfldrid']
 
     if request.content_type == 'application/json':
-        respo=r_qaccss(vauth,vhid,vpthid)
+        respo=r_actvty(vauth,vhid,vpthid)
         print(respo.content)
         return respo.content
     else:
