@@ -752,7 +752,7 @@ def fldrcreate():
         
         if (cpthrep.status_code >= 200 and cpthrep.status_code < 300):
             # Logging Activity
-            respfldr=r_getfldrid(vauth,vhid,vpthnm)
+            respfldr=r_getfldrid(vauth,vhid,vfldrname)
             if(respfldr.status_code >= 200 and respfldr.status_code < 300):
                 getfldrid = respfldr.json()
                 vobjid=getfldrid[0]['path_id']            
