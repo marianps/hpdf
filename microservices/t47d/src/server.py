@@ -752,7 +752,11 @@ def fldrcreate():
         
         if (cpthrep.status_code >= 200 and cpthrep.status_code < 300):
             # Logging Activity
-            vobjid=1
+            respfldr=r_getfldrid(vauth,vhid,vpthnm)
+            if(respfldr.status_code >= 200 and respfldr.status_code < 300):
+                getfldrid = respfldr.json()
+                vobjid=getfldrid[0]['path_id']            
+            
             actresp=c_usractvty(vauth,vhid,vuser,str(vobjid),"Folder",vfldrname,"Create","You created a folder",vpthid)
 
             # querying for User root folder id for newly created user
