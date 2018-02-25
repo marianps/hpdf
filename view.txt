@@ -1,6 +1,0 @@
-"sql" : "CREATE VIEW v_usractvty AS SELECT actid, username, user_id, obj_id, obj_type, obj_nm, act_nm, act_desc, modified_at FROM user_activity ORDER BY modified_at desc LIMIT 4;"
-
-
-add_existing_table_or_view
-
-"name" : "v_usractvty"
