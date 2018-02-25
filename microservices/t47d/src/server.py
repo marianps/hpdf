@@ -551,8 +551,8 @@ def dlogin():
     # This is the url to which the query is made
     url = "https://auth." + CLUSTER_NAME + ".hasura-app.io/v1/login"
 
-    print(request.headers)
-    print(request.data)
+#    print(request.headers)
+#    print(request.data)
     print(request.json)
     print(request.is_json)
     content = request.json
@@ -584,18 +584,18 @@ def dlogin():
     resp = requests.request("POST", url, data=json.dumps(requestPayload), headers=headers)
     # resp.content contains the json response.
 
-    print(resp.content)
+#    print(resp.content)
     if(resp.status_code >= 200 and resp.status_code < 300):
         vauthdata = resp.json()
-        print(vauthdata['auth_token'])
-        print(vauthdata['username'])
-        print(vauthdata['hasura_id'])
-        print(vauthdata['hasura_roles'])
+#        print(vauthdata['auth_token'])
+#        print(vauthdata['username'])
+#        print(vauthdata['hasura_id'])
+#        print(vauthdata['hasura_roles'])
 
         usrirep=r_userinfo(vauthdata['auth_token'],vauthdata['hasura_id'])
         if(usrirep.status_code >= 200 and usrirep.status_code < 300):
             usrdt = usrirep.json()
-            print(usrdt)
+#            print(usrdt)
 
 
             data_app = {}
@@ -621,8 +621,8 @@ def dlogin():
                 fldrresp=r_folderlist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
                 flresp=r_filelist(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
                 qaccresp=r_qaccss(vauthdata['auth_token'],vauthdata['hasura_id'],usrdt[0]['root_path_id'])
-                print(fldrresp.json())
-                print(flresp.json())
+#                print(fldrresp.json())
+#                print(flresp.json())
                 #respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=resp.content, fldr=fldrresp.json(), fllst=flresp.json()))
                 respo = make_response(render_template('homedrive.html', name=vauthdata['username'], msg=json_app, qa=qaccresp.json(), fldr=fldrresp.json(), fllst=flresp.json(),pthid=str(usrdt[0]['root_path_id'])))
                 respo.set_cookie(CLUSTER_NAME, vauthdata['auth_token'])
@@ -641,8 +641,8 @@ def dregister():
     # This is the url to which the query is made
     url = "https://auth." + CLUSTER_NAME + ".hasura-app.io/v1/signup"
 
-    print(request.content_type)
-    print(request.data)
+#    print(request.content_type)
+#    print(request.data)
     print(request.json)
     print(request.is_json)
     content = request.json
@@ -668,18 +668,18 @@ def dregister():
         "Content-Type": "application/json"
     }
 
-    print(requestPayload)
+#    print(requestPayload)
     # Make the query and store response in resp
     resp = requests.request("POST", url, data=json.dumps(requestPayload), headers=headers)
 
     #  resp.content contains the json response.
-    print(resp.content)
+#    print(resp.content)
     if(resp.status_code >= 200 and resp.status_code < 300):
         vauthdata = resp.json()
-        print(vauthdata['auth_token'])
-        print(vauthdata['username'])
-        print(vauthdata['hasura_id'])
-        print(vauthdata['hasura_roles'])
+#        print(vauthdata['auth_token'])
+#        print(vauthdata['username'])
+#        print(vauthdata['hasura_id'])
+#        print(vauthdata['hasura_roles'])
 
         #Creating user root folder for newly created user
         cpthrep=c_userfldr(vauthdata['auth_token'],vauthdata['hasura_id'],DEF_PRNT_PTHID,DEF_USR_PATH)
@@ -738,8 +738,8 @@ def fldrcreate():
     vpthid = request.cookies.get('rtpthid')
     vhid = request.headers.get('X-Hasura-User-Id')
 
-    print(request.content_type)
-    print(request.data)
+#    print(request.content_type)
+#    print(request.data)
     print(request.json)
     print(request.is_json)
     content = request.json
@@ -784,9 +784,9 @@ def fileupload():
     # This is the url to which the query is made
     url = "https://filestore." + CLUSTER_NAME + ".hasura-app.io/v1/file"
 
-    print(request)
-    print(request.headers)
-    print(request.form)
+#    print(request)
+#    print(request.headers)
+#    print(request.form)
     print(request.json)
     print(request.cookies)
 
@@ -796,8 +796,8 @@ def fileupload():
     vhid = request.headers.get('X-Hasura-User-Id')
     orgn =  request.headers.get('Origin')
     hst =  "https://"+request.headers.get('Host')
-    print(orgn)
-    print(hst)
+#    print(orgn)
+#    print(hst)
     # Setting headers
     headers = {
         "Authorization": "Bearer " + vauth
@@ -808,12 +808,12 @@ def fileupload():
         if request.content_type == 'application/json':
             content = request.json
             fileup = content['hvfname']
-            print("file" , fileup)
+#            print("file" , fileup)
             vpthid = content['hvfldrid']
 
         else:
             fileup = request.files['hvfname']
-            print("file" , fileup)
+#            print("file" , fileup)
             vpthid = request.form['hvfldrid']
 
         if fileup and allowed_file(fileup.filename):
@@ -824,15 +824,15 @@ def fileupload():
     # resp.content contains the json response.
         if(resp.status_code >= 200 and resp.status_code < 300):
             vfileupload = resp.json()
-            print(vfileupload['file_id'])
-            print(vfileupload['user_id'])
-            print(vfileupload['user_role'])
-            print(vfileupload['content_type'])
-            print(vfileupload['file_status'])
-            print(vfileupload['created_at'])
-            print(vfileupload['file_size'])
-            vfilesize=vfileupload['file_size']
-            vfileid=vfileupload['file_id']
+#            print(vfileupload['file_id'])
+#            print(vfileupload['user_id'])
+#            print(vfileupload['user_role'])
+#            print(vfileupload['content_type'])
+#            print(vfileupload['file_status'])
+#            print(vfileupload['created_at'])
+#            print(vfileupload['file_size'])
+#            vfilesize=vfileupload['file_size']
+#            vfileid=vfileupload['file_id']
 
             # Logging Activity
             vobjid=vfileid
@@ -876,23 +876,15 @@ def fileupload():
 @app.route("/fupload2", methods = ['POST','GET'])
 def fileupload2():
 
-    print(request)
-    print(request.headers)
-    print(request.form)
+#    print(request)
+#    print(request.headers)
+#    print(request.form)
     print(request.json)
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
     vuser = request.cookies.get(vauth)
     vpthid = request.cookies.get('rtpthid')
     vhid = request.headers.get('X-Hasura-User-Id')
-    orgn =  request.headers.get('Origin')
-    hst =  "https://"+request.headers.get('Host')
-    print(orgn)
-    print(hst)
-    # Setting headers
-    headers = {
-        "Authorization": "Bearer " + vauth
-    }
 
     # Open the file
     if request.method =='POST':
@@ -917,9 +909,9 @@ def fileupload2():
 @app.route("/usract", methods = ['POST','GET'])
 def usract():
 
-    print(request)
-    print(request.headers)
-    print(request.form)
+#    print(request)
+#    print(request.headers)
+#    print(request.form)
     print(request.json)
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
@@ -956,9 +948,9 @@ def usract():
 @app.route("/fchge/<vpthnm>", methods = ['GET'])
 def fchge(vpthnm):
 
-    print(request)
-    print(request.headers)
-    print(request.form)
+#    print(request)
+#    print(request.headers)
+#    print(request.form)
     print(request.json)
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
@@ -970,10 +962,10 @@ def fchge(vpthnm):
     # resp.content contains the json response.
     if(respfldr.status_code >= 200 and respfldr.status_code < 300):
             getfldrid = respfldr.json()
-            print(getfldrid[0]['path_nm'])
-            print(getfldrid[0]['path_id'])
-            print(getfldrid[0]['prnt_path_id'])
-            print(getfldrid[0]['modified_at'])
+#            print(getfldrid[0]['path_nm'])
+#            print(getfldrid[0]['path_id'])
+#            print(getfldrid[0]['prnt_path_id'])
+#            print(getfldrid[0]['modified_at'])
             vpthid=getfldrid[0]['path_id']
             fldrresp=r_folderlist(vauth,vhid,vpthid)
             flresp=r_filelist(vauth,vhid,vpthid)
@@ -987,9 +979,9 @@ def fchge(vpthnm):
 @app.route("/filelist", methods = ['POST','GET'])
 def filelist():
     # This is the url to which the query is made
-    print(request)
-    print(request.headers)
-    print(request.form)
+#    print(request)
+#    print(request.headers)
+#    print(request.form)
     print(request.json)
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
@@ -1005,7 +997,7 @@ def filelist():
 
     if request.content_type == 'application/json':
         respo=r_filelist(vauth,vhid,vpthid)
-        print(respo.content)
+#        print(respo.content)
         return respo.content
     else:
        fldrresp=r_folderlist(vauth,vhid,vpthid)
@@ -1017,9 +1009,9 @@ def filelist():
 @app.route("/qaccess", methods = ['POST','GET'])
 def qaccess():
     # This is the url to which the query is made
-    print(request)
-    print(request.headers)
-    print(request.form)
+#    print(request)
+#    print(request.headers)
+#    print(request.form)
     print(request.json)
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
@@ -1035,7 +1027,7 @@ def qaccess():
 
     if request.content_type == 'application/json':
         respo=r_qaccss(vauth,vhid,vpthid)
-        print(respo.content)
+#        print(respo.content)
         return respo.content
     else:
        qaccresp=r_qaccss(vauth,vhid,vpthid) 
@@ -1047,9 +1039,9 @@ def qaccess():
 @app.route("/actvty", methods = ['POST','GET'])
 def actvty():
     # This is the url to which the query is made
-    print(request)
-    print(request.headers)
-    print(request.form)
+ #   print(request)
+ #   print(request.headers)
+ #   print(request.form)
     print(request.json)
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
@@ -1065,7 +1057,7 @@ def actvty():
 
     if request.content_type == 'application/json':
         respo=r_actvty(vauth,vhid,vpthid)
-        print(respo.content)
+#        print(respo.content)
         return respo.content
     else:
        qaccresp=r_qaccss(vauth,vhid,vpthid) 
@@ -1077,9 +1069,9 @@ def actvty():
 @app.route("/fldrlist", methods = ['POST','GET'])
 def fldrlist():
     # This is the url to which the query is made
-    print(request)
-    print(request.headers)
-    print(request.form)
+#    print(request)
+#    print(request.headers)
+#    print(request.form)
     print(request.json)
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
@@ -1095,7 +1087,7 @@ def fldrlist():
 
     if request.content_type == 'application/json':
         respo=r_folderlist(vauth,vhid,vpthid)
-        print(respo.content)
+#        print(respo.content)
         return respo.content
     else:
         fldrresp==r_folderlist(vauth,vhid,vpthid)
@@ -1107,9 +1099,9 @@ def fldrlist():
 @app.route("/dlogout", methods = ['POST', 'GET'])
 def dlogout():
 
-    print(request)
-    print(request.headers)
-    print(request.form)
+#    print(request)
+#    print(request.headers)
+#    print(request.form)
     print(request.json)
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
@@ -1150,9 +1142,9 @@ def dlogout():
 @app.route("/dwnload/<vfileid>" , methods = ['GET'])
 def dlwnload(vfileid):
 
-    print(request)
-    print(request.headers)
-    print(request.form)
+#    print(request)
+#    print(request.headers)
+#    print(request.form)
     print(request.json)
     print(request.cookies)
     vauth = request.cookies.get(CLUSTER_NAME)
