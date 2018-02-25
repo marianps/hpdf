@@ -456,18 +456,18 @@ def c_userfldr(vauth,vhid,vprntpthid,pthnm):
 
     # This is the json payload for the query
     requestPayload = {
-        "type": "insert",
-        "args": {
-            "table": "user_paths",
-            "objects": [
-                {
-                    "path_nm": pthnm,
-                    "prnt_path_id": vprntpthid,
-                    "user_id": vhid
-                }
-            ]
-        }
-}
+            "type": "insert",
+            "args": {
+                "table": "user_paths",
+                "objects": [
+                    {
+                        "path_nm": pthnm,
+                        "prnt_path_id": vprntpthid,
+                        "user_id": vhid
+                    }
+                ]
+            }
+    }
 
 
     # Setting headers
