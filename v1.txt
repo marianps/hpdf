@@ -1,0 +1,39 @@
+    respfldr=r_getfldrid(vauth,vhid,vpthnm)
+    if(respfldr.status_code >= 200 and respfldr.status_code < 300):
+            getfldrid = respfldr.json()
+            vpthid=getfldrid[0]['path_id']\
+
+
+ "type": "runsql"
+
+SELECT * FROM user_activity WHERE to_char(modified_at, 'YYYYMMDD') >
+to_char((now() - interval '1 day'), 'YYYYMMDD');
+
+SELECT * FROM user_activity WHERE to_char(modified_at, 'YYYYMMDD') >
+to_char((now() - interval '1 day'), 'YYYYMMDD');
+
+{
+    "type": "runsql",
+    "args" : { "sql" : "DROP VIEW v_usractvty ;", }
+}
+
+{
+    "type": "runsql",
+    "args" : { "sql" : "CREATE VIEW v_usract AS SELECT * FROM user_activity WHERE to_char(modified_at, 'YYYYMMDD') >
+to_char((now() - interval '1 day'), 'YYYYMMDD');", }
+}
+
+{
+  "type" : "run_sql",
+  "args" : {
+    "sql" : "CREATE VIEW v_usract AS SELECT * FROM user_activity WHERE to_char(modified_at, 'YYYYMMDD') > to_char((now() - interval '1 day'), 'YYYYMMDD');",
+  }
+}
+
+{
+  "type" : "add_existing_table_or_view",
+  "args" : {
+    "name" : "v_usract"
+  }
+}
+

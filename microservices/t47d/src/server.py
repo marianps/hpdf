@@ -197,27 +197,32 @@ def r_qaccss(vauth,vhid,vpthid):
 
     # This is the json payload for the query
     requestPayload1 = {
-        "type": "select",
-        "args": {
-            "table": "user_activity",
-            "columns": [
-                "username",
-                "obj_id",
-                "obj_nm",
-                "obj_type",
-                "act_nm",
-                "act_desc",
-                "modified_at"
-            ],
-            "limit": "4",
-            "where": {
-                "user_id": {
-                    "$eq": vhid
-                }
+    "type": "select",
+    "args": {
+        "table": "v_usrqaccss",
+        "columns": [
+            "username",
+            "obj_id",
+            "obj_type",
+            "obj_nm",
+            "act_nm",
+            "act_desc",
+            "modified_at"
+        ],
+        "order_by": [
+            {
+                "column": "modified_at",
+                "order": "desc"
             }
-        }
+        ],
+        "where": {
+            "user_id": {
+                "$eq": vhid
+            }
+        },
+        "limit": "4"
     }
-
+}
 
     # Setting headers
     headers1 = {
