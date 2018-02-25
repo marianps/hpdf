@@ -841,8 +841,8 @@ def fileupload():
 #            print(vfileupload['file_status'])
 #            print(vfileupload['created_at'])
 #            print(vfileupload['file_size'])
-#            vfilesize=vfileupload['file_size']
-#            vfileid=vfileupload['file_id']
+            vfilesize=vfileupload['file_size']
+            vfileid=vfileupload['file_id']
 
             # Logging Activity
             vobjid=vfileid
