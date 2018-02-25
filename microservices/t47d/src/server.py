@@ -209,20 +209,30 @@ def r_qaccss(vauth,vhid,vpthid):
             "act_desc",
             "modified_at"
         ],
+        "where": {
+            "$and": [
+                {
+                    "user_id": {
+                        "$eq": vhid
+                    }
+                },
+                {
+                    "obj_type": {
+                        "$eq": "File"
+                    }
+                }
+            ]
+        },
+        "limit": "4",
         "order_by": [
             {
                 "column": "modified_at",
                 "order": "desc"
             }
-        ],
-        "where": {
-            "user_id": {
-                "$eq": vhid
-            }
-        },
-        "limit": "4"
+        ]
     }
 }
+
 
     # Setting headers
     headers1 = {
