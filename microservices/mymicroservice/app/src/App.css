@@ -1,0 +1,109 @@
+.App {
+  text-align: center;
+  position: relative;
+  display : flex;
+ 
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+.navbarleftdiv li{
+  list-style-type: none !important;
+  margin-top: -10px ;
+  font-size: 14px !important;
+  font-weight: bold !important;
+}
+.App-intro {
+  font-size: large;
+}
+
+.trial{
+  display: flex;
+  position: relative;
+}
+
+.navbar{
+  background-color: #fff !important;
+  
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgb(158, 158, 158) !important;
+  height: 135px;
+ 
+  
+}
+.navbarleftdiv {
+ 
+  display: flex;
+ 
+
+  
+}
+
+droplist{
+  padding-left: 10px;
+  font-size: 15px;
+ }
+.TopMenu{
+  background-color: rgb(247, 244, 244);
+  height: 50px;
+ 
+  width: 700px;
+
+  max-width:100%;
+  text-align: left;
+  
+
+
+  
+}
+
+.AutoComplete{
+  width: 700px;
+}
+
+.gridIcon {
+  height: 20px;
+  margin: 0;
+  padding: 10px;
+  margin-top: 15px;
+  margin-right: 15px; 
+
+}
+
+.trial{
+  display: flex;
+  position: relative;
+}
+
+
+.driveLogo{
+  height: 55px;
+  width: 175px;
+  
+}
+.menu{
+text-align: start;
+}
+.newbutton{
+  width: 110px;
+  color: #fff !important;
+ 
+}
+.dropbutton{
+  color:#fff !important;
+  margin-left: -100;
+}
+
